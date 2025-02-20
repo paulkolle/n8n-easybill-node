@@ -1,3 +1,5 @@
+![Repo Image](easybill.png)
+
 # n8n-nodes-easybill
 
 This is an n8n community node. It lets you use the Easybill API in your n8n workflows.
