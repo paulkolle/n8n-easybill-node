@@ -1,5 +1,5 @@
 import { INodeType, INodeTypeDescription } from 'n8n-workflow';
-import { NodeConnectionType } from 'n8n-workflow';
+// import { NodeConnectionType } from 'n8n-workflow';
 import { customerOperations } from './Customers/CustomerOperations';
 import { customerFields } from './Customers/CustomerFields';
 import { documentFields } from './Documents/DocumentsFields';
@@ -19,7 +19,8 @@ import { documentOperations } from './Documents/DocumentsOperations';
 export class EasyBill implements INodeType {
     description: INodeTypeDescription = {
         displayName: 'EasyBill',
-        name: 'EasyBill',
+        name: 'easyBill',
+        //@ts-no-check
         icon: 'file:easybill.png',
         group: ['transform'],
         version: 1,
@@ -28,11 +29,15 @@ export class EasyBill implements INodeType {
         defaults: {
             name: 'EasyBill',
         },
-        inputs: [NodeConnectionType.Main],
-        outputs: [NodeConnectionType.Main],
+        // inputs: [NodeConnectionType.Main],
+        // outputs: [NodeConnectionType.Main],
+        //@ts-ignore
+        inputs: ['main'],
+        //@ts-ignore
+        outputs: ['main'],
         credentials: [
             {
-                name: 'EasyBillApi',
+                name: 'easyBillApi',
                 required: true,
             },
         ],

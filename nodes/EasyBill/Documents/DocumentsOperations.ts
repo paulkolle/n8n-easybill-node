@@ -31,16 +31,22 @@ export const documentOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Get Doc List',
-				value: 'getDocList',
-				action: 'Fetch documents list',
-				description: 'Ruft die Liste der Dokumente ab',
-				routing: {
-					request: {
-						method: 'GET',
-						url: '/documents',
-					},
-				}
+				name: 'Cancel Document',
+				value: 'cancelDocument',
+				action: 'Cancel document',
+				description: 'Bricht ein Dokument ab',
+			},
+			{
+				name: 'Complete Document',
+				value: 'completeDocument',
+				action: 'Complete document',
+				description: 'Markiert ein Dokument als abgeschlossen',
+			},	
+			{
+				name: 'Convert Document',
+				value: 'convertDocument',
+				action: 'Convert document',
+				description: 'Konvertiert ein Dokument in einen anderen Typ',
 			},
 			{
 				name: 'Create Document',
@@ -53,12 +59,36 @@ export const documentOperations: INodeProperties[] = [
                         url: '/documents',
                     },
                 },
+			},		
+			{
+				name: 'Delete Document',
+				value: 'deleteDocument',
+				action: 'Delete document',
+				description: 'Löscht ein Dokument',
+			},
+			{
+				name: 'Get Doc List',
+				value: 'getDocList',
+				action: 'Fetch documents list',
+				description: 'Ruft die Liste der Dokumente ab',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '/documents',
+					},
+				}
 			},
 			{
 				name: 'Get Document',
 				value: 'getDocument',
 				action: 'Fetch document',
 				description: 'Ruft ein einzelnes Dokument ab',
+			},	
+			{
+				name: 'Send Document',
+				value: 'sendDocument',
+				action: 'Send document',
+				description: 'Sendet ein Dokument',
 			},
 			{
 				name: 'Update Document',
@@ -67,31 +97,7 @@ export const documentOperations: INodeProperties[] = [
 				description: 'Aktualisiert ein Dokument',
 				
 			},
-			{
-				name: 'Delete Document',
-				value: 'deleteDocument',
-				action: 'Delete document',
-				description: 'Löscht ein Dokument',
-			},
-			{
-				name: 'Complete Document',
-				value: 'completeDocument',
-				action: 'Complete document',
-				description: 'Markiert ein Dokument als abgeschlossen',
-			},
-			{
-				name: 'Cancel Document',
-				value: 'cancelDocument',
-				action: 'Cancel document',
-				description: 'Bricht ein Dokument ab',
-			},
-			{
-				name: 'Send Document',
-				value: 'sendDocument',
-				action: 'Send document',
-				description: 'Sendet ein Dokument',
-			},
-			//Geht nicht
+			//Doesnt Work
 			// {
 			// 	name: 'Get PDF',
 			// 	value: 'getPdf',
@@ -104,12 +110,7 @@ export const documentOperations: INodeProperties[] = [
 			// 	action: 'Download document as JPEG',
 			// 	description: 'Lädt ein Dokument als JPEG herunter',
 			// },
-			{
-				name: 'Convert Document',
-				value: 'convertDocument',
-				action: 'Convert document',
-				description: 'Konvertiert ein Dokument in einen anderen Typ',
-			},
+
 		],
 		default: 'getDocList',
 	},

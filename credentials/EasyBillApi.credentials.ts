@@ -6,8 +6,8 @@ import {
 } from 'n8n-workflow';
 
 export class EasyBillApi implements ICredentialType {
-	name = 'EasyBillApi';
-	displayName = 'EasyBill Api';
+	name = 'easyBillApi';
+	displayName = 'EasyBill API';
 	// Uses the link to this tutorial as an example
 	// Replace with your own docs links when building your own nodes
 	documentationUrl = 'https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/';
@@ -22,14 +22,14 @@ export class EasyBillApi implements ICredentialType {
 			},
 		},
 	];
-	authenticate = {
+	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
 			headers: {
 				Authorization: '={{ "Bearer " + $credentials.apiKey }}',
 			},
 		},
-	} as IAuthenticateGeneric;
+	};
     test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.easybill.de/rest/v1', // API-Base-URL

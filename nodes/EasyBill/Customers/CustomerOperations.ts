@@ -1,4 +1,4 @@
-import {INodeProperties} from 'n8n-workflow';
+import { INodeProperties } from 'n8n-workflow';
 
 /**
  * CUSTOMER ENDPOINTS
@@ -20,18 +20,6 @@ export const customerOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Get List',
-                value: 'getCustomerList',
-                action: 'Fetch customers list',
-                description: 'Ruft die Liste der Kunden ab',
-                routing: {
-                    request: {
-                        method: 'GET',
-                        url: '/customers',
-                    },
-                },
-            },
-            {
                 name: 'Create',
                 value: 'createCustomer',
                 action: 'Create customer',
@@ -44,29 +32,37 @@ export const customerOperations: INodeProperties[] = [
                 },
             },
             {
+                name: 'Delete Customer',
+                value: 'deleteCustomer',
+                action: 'Delete customer',
+                description: 'Delete a customer',
+            },
+            {
                 name: 'Get Customer',
                 value: 'getCustomer',
                 action: 'Get customer',
                 description: 'Get a customer',
-                // routing: {
-                //     request: {
-                //         method: 'GET',
-                //         url: '/customers/{{$value}}',
-                //     },
-                // },
             },
+            {
+                name: 'Get List',
+                value: 'getCustomerList',
+                action: 'Fetch customers list',
+                description: 'Ruft die Liste der Kunden ab',
+                routing: {
+                    request: {
+                        method: 'GET',
+                        url: '/customers',
+                    },
+                },
+            },
+
             {
                 name: 'Update Customer',
                 value: 'updateCustomer',
                 action: 'Update customer',
                 description: 'Update a customer',
             },
-            {
-                name: 'Delete Customer',
-                value: 'deleteCustomer',
-                action: 'Delete customer',
-                description: 'Delete a customer',
-            },
+
             // Weitere Operationen wie Get (einzelner Kunde), Update und Delete können hier ergänzt werden.
         ],
         default: 'getCustomerList',

@@ -1,19 +1,20 @@
 {
   "name": "n8n-nodes-easybill",
   "version": "0.1.0",
-  "description": "",
+  "description": "Integration der EasyBill Api in n8n",
   "keywords": [
-    "n8n-community-node-package"
+    "n8n-community-node-package",
+    "easybill"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://paulkolle.de",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Paul",
+    "email": "pk@paulkolle.de"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "https://github.com/paulkolle/n8n-easybill-node"
   },
   "main": "index.js",
   "scripts": {
