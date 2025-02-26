@@ -268,7 +268,7 @@ export const documentFields: INodeProperties[] = [
 		],
 		displayOptions: {
 			show: {
-				documentOperation: ['getDocList'],
+				operation: ['getDocList'],
 				resource: ['document'],
 			},
 		}
@@ -284,7 +284,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: [
+				operation: [
 					'getDocument',
 				],
 				resource: ['document'],
@@ -307,7 +307,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['updateDocument'],
+				operation: ['updateDocument'],
 				resource: ['document'],
 			},
 		},
@@ -317,7 +317,7 @@ export const documentFields: INodeProperties[] = [
 				url: '=/documents/{{$value}}',
 			},
 		},
-	},{
+	}, {
 		displayName: 'Refresh Customer Data',
 		name: 'refresh_customer_data',
 		type: 'boolean',
@@ -325,7 +325,7 @@ export const documentFields: INodeProperties[] = [
 		description: 'Whether refresh_customer_data',
 		displayOptions: {
 			show: {
-				documentOperation: ['updateDocument'],
+				operation: ['updateDocument'],
 				resource: ['document'],
 			},
 		},
@@ -346,7 +346,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['completeDocument'],
+				operation: ['completeDocument'],
 				resource: ['document'],
 			},
 		},
@@ -382,7 +382,7 @@ export const documentFields: INodeProperties[] = [
 		],
 		displayOptions: {
 			show: {
-				documentOperation: ['completeDocument', 'updateDocument'],
+				operation: ['completeDocument', 'updateDocument'],
 				resource: ['document'],
 			},
 		},
@@ -397,7 +397,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['deleteDocument'],
+				operation: ['deleteDocument'],
 				resource: ['document'],
 			},
 		},
@@ -418,7 +418,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['cancelDocument'],
+				operation: ['cancelDocument'],
 				resource: ['document'],
 			},
 		},
@@ -455,7 +455,7 @@ export const documentFields: INodeProperties[] = [
 		],
 		displayOptions: {
 			show: {
-				documentOperation: ['cancelDocument'],
+				operation: ['cancelDocument'],
 				resource: ['document'],
 			},
 		},
@@ -471,7 +471,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['sendDocument'],
+				operation: ['sendDocument'],
 				resource: ['document'],
 			},
 		},
@@ -505,7 +505,7 @@ export const documentFields: INodeProperties[] = [
 		description: 'Available values : email, fax, post',
 		displayOptions: {
 			show: {
-				documentOperation: ['sendDocument'],
+				operation: ['sendDocument'],
 				resource: ['document'],
 			},
 		}
@@ -615,20 +615,20 @@ export const documentFields: INodeProperties[] = [
 		,
 		displayOptions: {
 			show: {
-				documentOperation: ['sendDocument'],
+				operation: ['sendDocument'],
 				resource: ['document'],
 			},
 		},
-		routing: {
-			request: {
-				// Hier wird ein Objekt erstellt, das zuerst die Pflichtfelder enthält
-				// und anschließend die optionalen Felder (aus der Collection) dazuhinzufügen.
-				// Der Spread-Operator (...) fügt alle Key-Value-Paare des Collections-Objekts hinzu.
-				body: '={{ { ...$parameter["additionalFieldsDocs"], items: $parameter["additionalFieldsDocs"].items ? (Array.isArray($parameter["additionalFieldsDocs"].items) ? $parameter["additionalFieldsDocs"].items : [$parameter["additionalFieldsDocs"].items]) : undefined, file_format_config: $parameter["additionalFieldsDocs"].file_format_config ? (Array.isArray($parameter["additionalFieldsDocs"].file_format_config) ? $parameter["additionalFieldsDocs"].file_format_config : [$parameter["additionalFieldsDocs"].file_format_config]) : undefined, service_date: $parameter["additionalFieldsDocs"].service_date ? (Array.isArray($parameter["additionalFieldsDocs"].service_date) ? $parameter["additionalFieldsDocs"].service_date : [$parameter["additionalFieldsDocs"].service_date]) : undefined, recurring_options: $parameter["additionalFieldsDocs"].recurring_options ? (Array.isArray($parameter["additionalFieldsDocs"].recurring_options) ? $parameter["additionalFieldsDocs"].recurring_options : [$parameter["additionalFieldsDocs"].recurring_options]) : undefined } }}'
+		// routing: {
+		// 	request: {
+		// 		// Hier wird ein Objekt erstellt, das zuerst die Pflichtfelder enthält
+		// 		// und anschließend die optionalen Felder (aus der Collection) dazuhinzufügen.
+		// 		// Der Spread-Operator (...) fügt alle Key-Value-Paare des Collections-Objekts hinzu.
+		// 		body: '={{ { ...$parameter["additionalFieldsDocs"], items: $parameter["additionalFieldsDocs"].items ? (Array.isArray($parameter["additionalFieldsDocs"].items) ? $parameter["additionalFieldsDocs"].items : [$parameter["additionalFieldsDocs"].items]) : undefined, file_format_config: $parameter["additionalFieldsDocs"].file_format_config ? (Array.isArray($parameter["additionalFieldsDocs"].file_format_config) ? $parameter["additionalFieldsDocs"].file_format_config : [$parameter["additionalFieldsDocs"].file_format_config]) : undefined, service_date: $parameter["additionalFieldsDocs"].service_date ? (Array.isArray($parameter["additionalFieldsDocs"].service_date) ? $parameter["additionalFieldsDocs"].service_date : [$parameter["additionalFieldsDocs"].service_date]) : undefined, recurring_options: $parameter["additionalFieldsDocs"].recurring_options ? (Array.isArray($parameter["additionalFieldsDocs"].recurring_options) ? $parameter["additionalFieldsDocs"].recurring_options : [$parameter["additionalFieldsDocs"].recurring_options]) : undefined } }}'
 
 
-			},
-		},
+		// 	},
+		// },
 	},
 
 
@@ -642,7 +642,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['getPdf'],
+				operation: ['getPdf'],
 				resource: ['document'],
 			},
 		},
@@ -666,7 +666,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['downloadJpeg'],
+				operation: ['downloadJpeg'],
 				resource: ['document'],
 			},
 		},
@@ -687,7 +687,7 @@ export const documentFields: INodeProperties[] = [
 		required: true,
 		displayOptions: {
 			show: {
-				documentOperation: ['convertDocument'],
+				operation: ['convertDocument'],
 				resource: ['document'],
 			},
 		},
@@ -707,7 +707,7 @@ export const documentFields: INodeProperties[] = [
 		description: 'Available values : DUNNING, REMINDER, CHARGE_CONFIRM, CHARGE, CREDIT, DELIVERY, INVOICE, ORDER',
 		displayOptions: {
 			show: {
-				documentOperation: ['convertDocument'],
+				operation: ['convertDocument'],
 				resource: ['document'],
 			},
 		}
@@ -738,17 +738,32 @@ export const documentFields: INodeProperties[] = [
 		],
 		displayOptions: {
 			show: {
-				documentOperation: ['convertDocument'],
+				operation: ['convertDocument'],
 				resource: ['document'],
 			},
 		},
 	},
 
+	// {
+	// 	displayName: 'Das Ist Ein Test',
+	// 	name: "createTest",
+	// 	type: "string",
+	// 	default: "",
+	// 	displayOptions: {
+	// 		show: {
+	// 			operation: ['createDoc', 'updateDocument'],
+	// 			resource: ['document'],
+	// 		},
+	// 	},
+	// 	routing: {
+	// 		request: {
+	// 			body: {
+	// 				test: '={{ $parameter["createTest"] }}',
+	// 			},
 
-
-
-	// Felder für Create und Update Dokument (Body)
-
+	// 		},
+	// 	},
+	// },
 
 	// Optionale Felder als Collection für Create und Update
 	{
@@ -758,6 +773,7 @@ export const documentFields: INodeProperties[] = [
 		placeholder: 'Add Field',
 		default: {},
 		description: 'Additional JSON data',
+		
 		options: [
 			{
 				"displayName": "Acceptable on Public Domain",
@@ -818,8 +834,8 @@ export const documentFields: INodeProperties[] = [
 			{
 				"displayName": "Contact ID",
 				"name": "contact_id",
-				"type": "string",
-				"default": "",
+				"type": "number",
+				"default": 0,
 				"description": "The identifier for the contact."
 			},
 			{
@@ -844,11 +860,11 @@ export const documentFields: INodeProperties[] = [
 				"description": "The currency code used in the document."
 			},
 			{
-				"displayName": "Customer ID",
-				"name": "customer_id",
-				"type": "string",
-				"default": "",
-				"description": "The identifier for the customer."
+				displayName: "Customer ID",
+				name: "customer_id",
+				type: "number",
+				default: 0,
+				description: 'The identifier for the customer',
 			},
 			{
 				"displayName": "Discount",
@@ -936,22 +952,14 @@ export const documentFields: INodeProperties[] = [
 				"default": false,
 				"description": "Marks a document as a replica from another software."
 			},
+			// Items Start
 			{
 				"displayName": "Items",
 				"name": "items",
 				"type": "collection",
-				"default": [
-					{
-						"number": "1",
-						"description": "FIX&FLIP Experten Gespräch mit Paul",
-						"quantity": 1,
-						"unit": "Stk",
-						"type": "POSITION",
-						"single_price_net": 12521,
-						"vat_percent": 19
-					}
-				],
-				"description": "A list of items included in the document.",
+				"default": [],
+				"description": "An Item included in the document.",
+				hint: "Currently, only one item can be sent per request. If you need to add multiple items to an invoice, consider using the HTTP Request node or the Custom JSON field.",
 				"options": [
 					{
 						"displayName": "Booking Account",
@@ -1062,7 +1070,7 @@ export const documentFields: INodeProperties[] = [
 						"displayName": "Single Price Net",
 						"name": "single_price_net",
 						"type": "number",
-						"default": "",
+						"default": 5000,
 						"description": "The net unit price of the item."
 					},
 					{
@@ -1086,8 +1094,180 @@ export const documentFields: INodeProperties[] = [
 						"default": 0,
 						"description": "The VAT percentage applied to the item."
 					}
-				]
+				],
+				routing: {
+					request: {
+						body: {
+							items: '={{[$value]}}'
+						}
+					}
+				}
 			},
+			// {
+			// 	displayName: 'Items',
+			// 	name: 'items_fixedCol',
+			// 	placeholder: 'Add Item',
+			// 	type: 'fixedCollection',
+			// 	default: '',
+			// 	typeOptions: {
+			// 		multipleValues: false,
+			// 	},
+			// 	description: '',
+			// 	options: [
+			// 		{
+			// 			name: 'items',
+			// 			displayName: 'Item',
+			// 			values: 
+			// 			[
+			// 				{
+			// 					"displayName": "Booking Account",
+			// 					"name": "booking_account",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The booking account associated with the item."
+
+			// 				},
+			// 				{
+			// 					"displayName": "Cost Price Net",
+			// 					"name": "cost_price_net",
+			// 					"type": "number",
+			// 					"default": "",
+			// 					"description": "The net cost price of the item."
+
+			// 				},
+			// 				{
+			// 					"displayName": "Description",
+			// 					"name": "description",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "A brief description of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Discount",
+			// 					"name": "discount",
+			// 					"type": "number",
+			// 					"default": "",
+			// 					"description": "The discount amount applied to the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Discount Type",
+			// 					"name": "discount_type",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The type of discount applied to the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Document Note",
+			// 					"name": "document_note",
+			// 					"type": "string",
+			// 					"default": "Test Note",
+			// 					"description": "A note associated with the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Export Cost 1",
+			// 					"name": "export_cost_1",
+			// 					"type": "number",
+			// 					"default": "",
+			// 					"description": "The first export cost related to the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Export Cost 2",
+			// 					"name": "export_cost_2",
+			// 					"type": "number",
+			// 					"default": "",
+			// 					"description": "The second export cost related to the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Item Type",
+			// 					"name": "itemType",
+			// 					"type": "string",
+			// 					"default": "UNDEFINED",
+			// 					"description": "The defined type of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Number",
+			// 					"name": "number",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The item number."
+			// 				},
+			// 				{
+			// 					"displayName": "Position",
+			// 					"name": "position",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The position identifier of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Position ID",
+			// 					"name": "position_id",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The identifier for the item position."
+			// 				},
+			// 				{
+			// 					"displayName": "Quantity",
+			// 					"name": "quantity",
+			// 					"type": "number",
+			// 					"default": 1,
+			// 					"description": "The quantity of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Quantity (String)",
+			// 					"name": "quantity_str",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The quantity as a string."
+			// 				},
+			// 				{
+			// 					"displayName": "Single Price Gross",
+			// 					"name": "single_price_gross",
+			// 					"type": "number",
+			// 					"default": 0,
+			// 					"description": "The gross unit price of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Single Price Net",
+			// 					"name": "single_price_net",
+			// 					"type": "number",
+			// 					"default": 5000,
+			// 					"description": "The net unit price of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Type",
+			// 					"name": "type",
+			// 					"type": "string",
+			// 					"default": "POSITION",
+			// 					"description": "The type of the item."
+			// 				},
+			// 				{
+			// 					"displayName": "Unit",
+			// 					"name": "unit",
+			// 					"type": "string",
+			// 					"default": "",
+			// 					"description": "The unit of measurement for the item."
+			// 				},
+			// 				{
+			// 					"displayName": "VAT Percent",
+			// 					"name": "vat_percent",
+			// 					"type": "number",
+			// 					"default": 0,
+			// 					"description": "The VAT percentage applied to the item."
+			// 				}
+			// 			],
+			// 			routing: {
+			// 				request: {
+			// 					body: {
+			// 						items2: '={{ [$value] }}'
+			// 					},
+								
+			// 				}
+			// 			}
+			// 		},
+			// 	],
+			// },
+
+			// Items End
 			{
 				"displayName": "Login ID",
 				"name": "login_id",
@@ -1390,7 +1570,7 @@ export const documentFields: INodeProperties[] = [
 		,
 		displayOptions: {
 			show: {
-				documentOperation: ['createDoc', 'updateDocument'],
+				operation: ['createDoc', 'updateDocument'],
 				resource: ['document'],
 			},
 		},

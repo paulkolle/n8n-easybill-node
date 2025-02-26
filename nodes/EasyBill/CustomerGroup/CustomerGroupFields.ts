@@ -12,131 +12,18 @@ import { INodeProperties } from 'n8n-workflow';
  *
  * Hinweis: Bei einer umfangreicheren Implementierung könnten diese Felder ebenfalls in eine eigene Datei (z. B. CustomerFields.ts) ausgelagert werden.
  */
-export const customerFields: INodeProperties[] = [
+export const customerGroupFields: INodeProperties[] = [
 
-    // GET CUSTOMERS LIST
+    // GET CUSTOMER GROUPS LIST
     {
         displayName: 'Additional Fields',
         name: 'body',
         type: 'collection',
         placeholder: 'Add Field',
         default: {},
-        description: 'Additionial params for Customers',
+        description: 'Additionial params for Customer Groups',
         options: [
-            {
-                displayName: 'Additional Group ID',
-                name: 'additional_group_id',
-                type: 'string',
-                default: '',
-                // eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
-                description: 'Filter customers by additional_group_id. You can add multiple group ids separated by commas.',
-                routing: {
-                    request: {
-                        qs: {
-                            additional_group_id: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Company Name',
-                name: 'company_name',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by company_name. You can add multiple names separated by commas like name,name,name.',
-                routing: {
-                    request: {
-                        qs: {
-                            company_name: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Country',
-                name: 'country',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by country. You can add multiple countries separated by commas like DE,PL,FR.',
-                routing: {
-                    request: {
-                        qs: {
-                            country: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Created At',
-                name: 'created_at',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by created_at. You can filter one date with created_at=2014-12-10 or between like 2015-01-01,2015-12-31.',
-                routing: {
-                    request: {
-                        qs: {
-                            created_at: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Emails',
-                name: 'emails',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by emails. You can add multiple emails separated by commas like mail,mail,mail.',
-                routing: {
-                    request: {
-                        qs: {
-                            emails: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'First Name',
-                name: 'first_name',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by first_name. You can add multiple names separated by commas like name,name,name.',
-                routing: {
-                    request: {
-                        qs: {
-                            first_name: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Group ID',
-                name: 'group_id',
-                type: 'string',
-                default: '',
-                // eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
-                description: 'Filter customers by group_id. You can add multiple group ids separated by commas like id,id,id.',
-                routing: {
-                    request: {
-                        qs: {
-                            group_id: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Last Name',
-                name: 'last_name',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by last_name. You can add multiple names separated by commas like name,name,name.',
-                routing: {
-                    request: {
-                        qs: {
-                            last_name: '={{$value}}',
-                        },
-                    },
-                },
-            },
+           
             {
                 displayName: 'Limit',
                 name: 'limit',
@@ -155,20 +42,6 @@ export const customerFields: INodeProperties[] = [
                 },
             },
             {
-                displayName: 'Number',
-                name: 'number',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by number. You can add multiple numbers separated by commas like no,no,no.',
-                routing: {
-                    request: {
-                        qs: {
-                            number: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
                 displayName: 'Page',
                 name: 'page',
                 type: 'number',
@@ -182,127 +55,99 @@ export const customerFields: INodeProperties[] = [
                     },
                 },
             },
-            {
-                displayName: 'Type',
-                name: 'type',
-                type: 'string',
-                default: '',
-                description: 'Controls the type of the customer. If "number" or "supplier_number" is empty, the type will force number generation if applicable. Available values: CUSTOMER, SUPPLIER, CUSTOMER,SUPPLIER. Default value: CUSTOMER.',
-                routing: {
-                    request: {
-                        qs: {
-                            type: '={{$value}}',
-                        },
-                    },
-                },
-            },
-            {
-                displayName: 'Zip Code',
-                name: 'zip_code',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by zip_code. You can add multiple zip codes separated by commas like zip,zip,zip.',
-                routing: {
-                    request: {
-                        qs: {
-                            zip_code: '={{$value}}',
-                        },
-                    },
-                },
-            },
         ]
         ,
         displayOptions: {
             show: {
-                operation: ['getCustomerList'],
-                resource: ['customer'],
+                operation: ['getCustomerGroupList'],
+                resource: ['customerGroup'],
             },
         }
     },
 
 
-    // CREATE AND UPDATE CUSTOMER
-    {
-        displayName: 'Type',
-        name: 'type',
-        type: 'string',
-        default: 'CUSTOMER',
-        description: 'Controls the type of the customer. If "number" or "supplier_number" is empty, the type will force number generation if applicable. Available values: CUSTOMER, SUPPLIER, CUSTOMER,SUPPLIER. Default value: CUSTOMER.',
-        routing: {
-            request: {
-                qs: {
-                    type: '={{$value}}',
-                },
-            },
-        },
-        displayOptions: {
-            show: {
-                operation: ['createCustomer', 'updateCustomer'],
-                resource: ['customer'],
-            },
-        }
-    },
+    // CREATE AND UPDATE CUSTOMER GROUP
 
     {
-        displayName: 'Last Name',
-        name: 'last_name',
+        displayName: 'Name',
+        name: 'name',
         type: 'string',
         default: '',
-        description: 'Nachname des Kunden',
+        description: 'Example: Important customers',
         required: true, // Pflichtfeld
         displayOptions: {
             show: {
-                operation: ['createCustomer'],
-                resource: ['customer'],
+                operation: ['createCustomerGroup', 'updateCustomerGroup'],
+                resource: ['customerGroup'],
             },
         },
         routing: {
             request: {
                 body: {
-                    last_name: '={{ $value }}'
+                    name: '={{ $value }}'
                 }
             }
         }
     },
     {
-        displayName: 'Company Name',
-        name: 'company_name',
+        displayName: 'Number',
+        name: 'number',
         type: 'string',
         default: '',
-        description: 'Firmenname des Kunden',
+        description: 'Can be chosen freely',
         required: true, // Pflichtfeld
         displayOptions: {
             show: {
-                operation: ['createCustomer'],
-                resource: ['customer'],
+                operation: ['createCustomerGroup', 'updateCustomerGroup'],
+                resource: ['customerGroup'],
             },
         },
         routing: {
             request: {
                 body: {
-                    company_name: '={{ $value }}'
+                    number: '={{ $value }}'
                 }
             }
         }
     },
-    //UPDATE CUSTOMER
     {
-        displayName: 'Customer ID*',
-        name: 'customer_id',
+        displayName: 'Description',
+        name: 'description',
+        type: 'string',
+        default: '',
+        description: 'Example: Our most important customers',
+        displayOptions: {
+            show: {
+                operation: ['createCustomerGroup', 'updateCustomerGroup'],
+                resource: ['customerGroup'],
+            },
+        },
+        routing: {
+            request: {
+                body: {
+                    description: '={{ $value }}'
+                }
+            }
+        }
+    },
+    //UPDATE CUSTOMER GROUP
+    {
+        displayName: 'Customer Group ID*',
+        name: 'customerGroup_id',
         type: 'number',
         default: '',
-        description: 'Customer ID',
+        description: 'Customer Groups ID',
         required: true, // Pflichtfeld
         displayOptions: {
             show: {
-                operation: ['updateCustomer'],
-                resource: ['customer'],
+                operation: ['updateCustomerGroup'],
+                resource: ['customerGroup'],
             },
         },
         routing: {
             request: {
                 method: 'PUT',
-                url: '=/customers/{{$value}}',
+                url: '=/customer-groups/{{$value}}',
             },
         },
     },
@@ -532,47 +377,47 @@ export const customerFields: INodeProperties[] = [
             },
         },
     },
-    // GET CUSTOMER BY ID
+    // GET CUSTOMER GROUP BY ID
     {
-        displayName: 'Customer ID*',
-        name: 'customer_id',
+        displayName: 'Customer Grooup ID*',
+        name: 'customerGroup_id',
         type: 'number',
         default: '',
-        description: 'Customer ID',
+        description: 'Customer Group ID',
         required: true, // Pflichtfeld
         displayOptions: {
             show: {
-                operation: ['getCustomer'],
-                resource: ['customer'],
+                operation: ['getCustomerGroup'],
+                resource: ['customerGroup'],
             },
         },
         routing: {
             request: {
                 method: 'GET',
-                url: '=/customers/{{$value}}',
+                url: '=/customers-groups/{{$value}}',
             },
         },
 
     },
 
-    //DELETECUSTOMER
+    //DELETE CUSTOMER GROUP
     {
-        displayName: 'Customer ID*',
-        name: 'customer_id',
+        displayName: 'Customer Group ID*',
+        name: 'customerGroup_id',
         type: 'number',
         default: '',
-        description: 'Customer ID',
+        description: 'Customer Group ID',
         required: true, // Pflichtfeld
         displayOptions: {
             show: {
-                operation: ['deleteCustomer'],
-                resource: ['customer'],
+                operation: ['deleteCustomerGroup'],
+                resource: ['customerGroup'],
             },
         },
         routing: {
             request: {
                 method: 'DELETE',
-                url: '=/customers/{{$value}}',
+                url: '=/customer-groups/{{$value}}',
             },
         },
     },

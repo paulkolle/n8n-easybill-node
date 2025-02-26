@@ -4,6 +4,9 @@ import { customerOperations } from './Customers/CustomerOperations';
 import { customerFields } from './Customers/CustomerFields';
 import { documentFields } from './Documents/DocumentsFields';
 import { documentOperations } from './Documents/DocumentsOperations';
+import { hints } from './Hints';
+import { customerGroupOperations } from './CustomerGroup/CustomerGroupOperations';
+import { customerGroupFields } from './CustomerGroup/CustomerGroupFields';
 
 
 
@@ -42,13 +45,14 @@ export class EasyBill implements INodeType {
             },
         ],
         requestDefaults: {
-            baseURL: 'https://api.easybill.de/rest/v1',
-            //baseURL:'https://webhook-test.com/76208a0c872ce79441f063246ecf3c7a',
+            // baseURL: 'https://api.easybill.de/rest/v1',
+            baseURL: 'https://webhook.site/a51c3921-8a81-4fcb-8834-805a12bf8f8f',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
         },
+        hints: [...hints],
         // Nur der Kundenbereich wird hier integriert.
         properties: [
             {
@@ -59,15 +63,19 @@ export class EasyBill implements INodeType {
                 options: [
                     { name: 'Customer', value: 'customer', },
                     { name: 'Document', value: 'document', },
+                    { name: 'Customer Group', value: 'customerGroup', },
+
                     // Weitere Ressourcen können hier ergänzt werden.
                 ],
                 default: 'customer',
             },
             ...customerOperations,
-            
             ...documentOperations,
             ...documentFields,
             ...customerFields,
+            ...customerGroupOperations,
+            ...customerGroupFields
+
         ],
     };
 }
