@@ -776,6 +776,39 @@ export const documentFields: INodeProperties[] = [
 		
 		options: [
 			{
+				displayName: 'Item Test',
+				name: 'utemTest',
+				placeholder: 'Add Item Test',
+				type: 'fixedCollection',
+				default: '',
+				typeOptions: {
+					multipleValues: true,
+				},
+				description: '',
+				options: [
+					{
+						name: 'itemValues',
+						displayName: 'Item',
+						values: [
+							{
+								displayName: 'Name',
+								name: 'name',
+								type: 'string',
+								default: 'Name of the metadata key to add.',
+							},
+							{
+								displayName: 'Value',
+								name: 'value',
+								type: 'string',
+								default: '',
+								description: 'Value to set for the metadata key.',
+							},
+						],
+					},
+				],
+				
+			},
+			{
 				"displayName": "Acceptable on Public Domain",
 				"name": "is_acceptable_on_public_domain",
 				"type": "boolean",
