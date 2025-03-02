@@ -38,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "@types/request": "^2.48.12",
     "@typescript-eslint/parser": "~5.45",
     "eslint-plugin-n8n-nodes-base": "^1.11.0",
     "gulp": "^4.0.2",
@@ -47,5 +48,8 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
   }
 }

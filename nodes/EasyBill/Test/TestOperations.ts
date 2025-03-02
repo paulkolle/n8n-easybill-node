@@ -15,9 +15,9 @@ export const testOperations: INodeProperties[] = [
 		options: [
 			{
 				name: 'Create',
-				value: 'createTest',
-				action: 'Create test 1',
-				description: 'Bricht ein Dokument ab',
+				value: 'createDocument',
+				action: 'Create document',
+				description: 'Creates Document',
 				routing: {
 					request: {
 						method: "POST",
@@ -25,14 +25,8 @@ export const testOperations: INodeProperties[] = [
 					}
 				}
 			},
-			{
-				name: 'Get',
-				value: 'getTest',
-				action: 'Get test 1',
-				description: 'Markiert ein Dokument als abgeschlossen',
-			},	
 		],
-		default: 'createTest',
+		default: 'createDocument',
 	},
 ]
 

@@ -7,7 +7,14 @@ import { documentOperations } from './Documents/DocumentsOperations';
 import { hints } from './Hints';
 import { customerGroupOperations } from './CustomerGroup/CustomerGroupOperations';
 import { customerGroupFields } from './CustomerGroup/CustomerGroupFields';
-
+import { IExecuteFunctions } from 'n8n-workflow';
+import {
+    IDataObject,
+    INodeExecutionData,
+} from 'n8n-workflow';
+import {
+    OptionsWithUri,
+} from 'request';
 
 
 /**
@@ -63,19 +70,749 @@ export class EasyBill implements INodeType {
                 options: [
                     { name: 'Customer', value: 'customer', },
                     { name: 'Document', value: 'document', },
-                    { name: 'Customer Group', value: 'customerGroup', },
+                    // { name: 'Customer Group', value: 'customerGroup', },
 
                     // Weitere Ressourcen können hier ergänzt werden.
                 ],
-                default: 'customer',
+                default: 'document',
             },
-            ...customerOperations,
+
             ...documentOperations,
             ...documentFields,
+            ...customerOperations,
             ...customerFields,
-            ...customerGroupOperations,
-            ...customerGroupFields
-
+            // ...customerGroupOperations,
+            // ...customerGroupFields
         ],
     };
+    // The execute method will go here
+
+    async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+        const baseUrl = 'https://webhook.site/7a3a6e3b-d001-4686-8f80-7c7fac939015'
+        // Eingabedaten aus vorherigen Nodes
+        const items = this.getInputData();
+        let responseData;
+        const returnData = [];
+        const resource = this.getNodeParameter('resource', 0) as string;
+        const operation = this.getNodeParameter('operation', 0) as string;
+
+        for (let i = 0; i < items.length; i++) {
+            /* -------------------------------------------------------------------------- */
+            /*                                 Document                                   */
+            /* -------------------------------------------------------------------------- */
+            if (resource === 'document') {
+                /* ╔═══════════════════╗ */
+                /* ║  CREATE DOCUMENT  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'createDocument') {
+                    // Hole die Parameter (können auch undefined oder leer sein)
+                    const customerId = this.getNodeParameter('customer_id', i) as number | undefined;
+                    const text = this.getNodeParameter('text', i) as string | undefined;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const itemsFixedCol = this.getNodeParameter('itemsFixedCol', i) as IDataObject;
+
+                    // Baue das Datenobjekt dynamisch auf
+                    const data: IDataObject = {};
+
+                    if (customerId !== undefined) {
+                        data.customerId = customerId;
+                    }
+
+                    if (text !== undefined && text !== '') {
+                        data.text = text;
+                    }
+
+                    if (itemsFixedCol && Object.keys(itemsFixedCol).length > 0) {
+                        data.itemsFixedCol = itemsFixedCol;
+                    }
+
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(data, additionalFields);
+                    }
+
+                    // Falls file_format_config_type angegeben ist, in file_format_config umwandeln
+                    if (data.file_format_config_type !== undefined && data.file_format_config_type !== '') {
+                        data.file_format_config = [
+                            {
+                                type: data.file_format_config_type,
+                            },
+                        ];
+                        delete data.file_format_config_type;
+                    }
+
+                    // Falls fixedcol_recurring_options definiert ist und darin recurring_option existiert,
+                    // in recurring_options umwandeln
+                    if (
+                        data.fixedcol_recurring_options &&
+                        typeof data.fixedcol_recurring_options === 'object' &&
+                        'recurring_option' in data.fixedcol_recurring_options &&
+                        data.fixedcol_recurring_options.recurring_option
+                    ) {
+                        data.recurring_options = data.fixedcol_recurring_options.recurring_option;
+                        delete data.fixedcol_recurring_options;
+                    }
+
+                    // Alternativ: Falls bereits recurring_options definiert ist, aber leer, entfernen wir es.
+                    if (data.recurring_options && typeof data.recurring_options === 'object' && Object.keys(data.recurring_options).length === 0) {
+                        delete data.recurring_options;
+                    }
+
+                    // Wenn itemsFixedCol vorhanden ist und das Feld itemsValues enthält, umwandeln
+                    if (data.itemsFixedCol && typeof data.itemsFixedCol === 'object' && 'itemsValues' in data.itemsFixedCol) {
+                        data.items = data.itemsFixedCol.itemsValues;
+                        delete data.itemsFixedCol;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: data,
+                        uri: `${baseUrl}`,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═══════════════════╗ */
+                /* ║  UPDATE DOCUMENT  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'updateDocument') {
+                    // Hole die Parameter (können auch undefined oder leer sein)
+                    const documentId = this.getNodeParameter('document_id', i) as number | undefined;
+                    const text = this.getNodeParameter('text', i) as string | undefined;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const itemsFixedCol = this.getNodeParameter('itemsFixedCol', i) as IDataObject;
+
+                    const refresh_customer_data = this.getNodeParameter('refresh_customer_data', i) as boolean | undefined;
+                    const reason_for_change = this.getNodeParameter('reason_for_change', i) as string | undefined;
+
+                    // Baue das Datenobjekt dynamisch auf (ohne documentId)
+                    const data: IDataObject = {};
+
+                    if (text !== undefined && text !== '') {
+                        data.text = text;
+                    }
+
+                    if (itemsFixedCol && Object.keys(itemsFixedCol).length > 0) {
+                        data.itemsFixedCol = itemsFixedCol;
+                    }
+
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(data, additionalFields);
+                    }
+
+                    // Falls file_format_config_type angegeben ist, in file_format_config umwandeln
+                    if (data.file_format_config_type !== undefined && data.file_format_config_type !== '') {
+                        data.file_format_config = [
+                            {
+                                type: data.file_format_config_type,
+                            },
+                        ];
+                        // Entferne das ursprüngliche Feld, damit es nicht doppelt übermittelt wird
+                        delete data.file_format_config_type;
+                    }
+
+                    // Falls fixedcol_recurring_options definiert ist und darin recurring_option existiert,
+                    // in recurring_options umwandeln
+                    if (
+                        data.fixedcol_recurring_options &&
+                        typeof data.fixedcol_recurring_options === 'object' &&
+                        'recurring_option' in data.fixedcol_recurring_options &&
+                        data.fixedcol_recurring_options.recurring_option
+                    ) {
+                        data.recurring_options = data.fixedcol_recurring_options.recurring_option;
+                        delete data.fixedcol_recurring_options;
+                    }
+
+                    // Wenn itemsFixedCol vorhanden ist und das Feld itemsValues enthält, umwandeln
+                    if (
+                        data.itemsFixedCol &&
+                        typeof data.itemsFixedCol === 'object' &&
+                        'itemsValues' in data.itemsFixedCol
+                    ) {
+                        data.items = data.itemsFixedCol.itemsValues;
+                        delete data.itemsFixedCol;
+                    }
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (refresh_customer_data !== undefined) {
+                        qs.refresh_customer_data = refresh_customer_data;
+                    }
+                    if (reason_for_change !== undefined && reason_for_change !== '') {
+                        qs.reason_for_change = reason_for_change;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen, documentId als Teil des Pfads
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'PUT',
+                        body: data,
+                        // Verwende documentId als Pfadparameter (hier Beispiel-URI anpassen)
+                        uri: `${baseUrl}/documents/${documentId}`,
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═════════════════════╗ */
+                /* ║  GET DOCUMENT LIST  ║ */
+                /* ╚═════════════════════╝ */
+                if (operation === 'getDocList') {
+                    // Hole die Parameter; bei optionalen Parametern wird undefined zurückgegeben, falls nicht gesetzt
+                    const limit = this.getNodeParameter('limit', i) as number | undefined;
+                    const page = this.getNodeParameter('page', i) as number | undefined;
+                    const additionalFields = this.getNodeParameter('body', i) as IDataObject;
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+
+                    if (limit !== undefined && limit !== null) {
+                        qs.limit = limit;
+                    }
+                    if (page !== undefined && page !== null) {
+                        qs.page = page;
+                    }
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen für die GET-Anfrage
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/documents`, // URL ggf. anpassen
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════╗ */
+                /* ║  GET DOCUMENT  ║ */
+                /* ╚════════════════╝ */
+                if (operation === 'getDocument') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/documents/${documentId}`,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═══════════════════╗ */
+                /* ║  DELETE DOCUMENT  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'deleteDocument') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'DELETE',
+                        uri: `${baseUrl}/documents/${documentId}`,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═════════════════════╗ */
+                /* ║  COMPLETE DOUCMENT  ║ */
+                /* ╚═════════════════════╝ */
+                if (operation === 'completeDocument') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+                    // Hole den optionalen Parameter reason_for_change
+                    const reason_for_change = this.getNodeParameter('reason_for_change', i) as string | undefined;
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (reason_for_change !== undefined && reason_for_change !== '') {
+                        qs.reason_for_change = reason_for_change;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId im Pfad und qs
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'PUT',
+                        uri: `${baseUrl}/documents/${documentId}/done`,
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═══════════════════╗ */
+                /* ║  CANCEL DOCUMENT  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'cancelDocument') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+                    // Hole den optionalen Parameter use_text_from_template
+                    const use_text_from_template = this.getNodeParameter('use_text_from_template', i) as boolean | undefined;
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (use_text_from_template !== undefined) {
+                        qs.use_text_from_template = use_text_from_template;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId im Pfad und qs
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        uri: `${baseUrl}/documents/${documentId}/cancel`,
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═════════════════╗ */
+                /* ║  SEND DOCUMENT  ║ */
+                /* ╚═════════════════╝ */
+                if (operation === 'sendDocument') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+                    // Hole den Pflichtparameter type
+                    const type = this.getNodeParameter('type', i) as string;
+                    // Hole optional den Parameter additionalFieldsSend als JSON-Body
+                    const additionalFieldsSend = this.getNodeParameter('additionalFieldsSend', i) as IDataObject;
+
+                    // Erstelle das Datenobjekt dynamisch, falls additionalFieldsSend vorhanden ist
+                    const body: IDataObject = {};
+                    if (additionalFieldsSend && Object.keys(additionalFieldsSend).length > 0) {
+                        Object.assign(body, additionalFieldsSend);
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId und type als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        uri: `${baseUrl}/documents/${documentId}/send/${type}`,
+                        json: true,
+                        body,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═════════════╗ */
+                /* ║  FETCH PDF  ║ */
+                /* ╚═════════════╝ */
+                if (operation === 'getPdf') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/documents/${documentId}/pdf`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═════════════╗ */
+                /* ║  FETCH JPG  ║ */
+                /* ╚═════════════╝ */
+                if (operation === 'downloadJpeg') {
+                    // Hole den Pflichtparameter document_id
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+                    // Hole die optionalen Parameter offset und limit
+                    const offset = this.getNodeParameter('offset', i) as number | undefined;
+                    const limit = this.getNodeParameter('limit', i) as number | undefined;
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (offset !== undefined) {
+                        qs.offset = offset;
+                    }
+                    if (limit !== undefined) {
+                        qs.limit = limit;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId als Pfadparameter und qs
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/documents/${documentId}/jpg`,
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═════════════════════════╗ */
+                /* ║  CONVERT DOCUMENT TYPE  ║ */
+                /* ╚═════════════════════════╝ */
+                if (operation === 'convertDocument') {
+                    // Hole die Pflichtparameter document_id und type
+                    const documentId = this.getNodeParameter('document_id', i) as number;
+                    const type = this.getNodeParameter('type', i) as string;
+
+                    // Hole additionalFieldsDocs, um optional pdf_template zu extrahieren
+                    const additionalFieldsDocs = this.getNodeParameter('additionalFieldsDocs', i) as IDataObject;
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (additionalFieldsDocs && additionalFieldsDocs.pdf_template !== undefined && additionalFieldsDocs.pdf_template !== '') {
+                        qs.pdf_template = additionalFieldsDocs.pdf_template;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen mit documentId und type als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        uri: `${baseUrl}/documents/${documentId}/${type}`,
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+            }
+            /* -------------------------------------------------------------------------- */
+            /*                                 Customer                                   */
+            /* -------------------------------------------------------------------------- */
+            if (resource === 'customer') {
+                /* ╔═══════════════════╗ */
+                /* ║  CREATE CUSTOMER  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'createCustomer') {
+                    // Hole die Pflichtparameter last_name und company_name
+                    const last_name = this.getNodeParameter('last_name', i) as string;
+                    const company_name = this.getNodeParameter('company_name', i) as string;
+                    // Hole den optionalen Parameter type für den Query-String
+                    const type = this.getNodeParameter('type', i) as string | undefined;
+                    // Hole optional weitere Felder aus additionalFields
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+                    // Baue das Datenobjekt für den Request-Body auf
+                    const data: IDataObject = {
+                        last_name,
+                        company_name,
+                    };
+
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(data, additionalFields);
+                    }
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (type !== undefined && type !== '') {
+                        qs.type = type;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen, verwende ${baseUrl} als Basis-URL
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        uri: `${baseUrl}/customers`,
+                        json: true,
+                        qs,
+                        body: data,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═══════════════════╗ */
+                /* ║  DELETE CUSTOMER  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'deleteCustomer') {
+                    // Hole den Pflichtparameter customer_id
+                    const customerId = this.getNodeParameter('customer_id', i) as number;
+
+                    // Erstelle die HTTP-Request-Optionen mit customerId als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'DELETE',
+                        uri: `${baseUrl}/customers/${customerId}`,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════╗ */
+                /* ║  GET CUSTOMER  ║ */
+                /* ╚════════════════╝ */
+                if (operation === 'getCustomer') {
+                    // Hole den Pflichtparameter customer_id
+                    const customerId = this.getNodeParameter('customer_id', i) as number;
+
+                    // Erstelle die HTTP-Request-Optionen mit customerId als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/customers/${customerId}`,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔══════════════════════╗ */
+                /* ║  GET CUSTOMERS LIST  ║ */
+                /* ╚══════════════════════╝ */
+                if (operation === 'getCustomerList') {
+                    // Hole optional additionalFields als Query-Parameter
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen für die GET-Anfrage
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/customers`,
+                        qs,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔═══════════════════╗ */
+                /* ║  UPDATE CUSTOMER  ║ */
+                /* ╚═══════════════════╝ */
+                if (operation === 'updateCustomer') {
+                    // Hole den Pflichtparameter customer_id
+                    const customerId = this.getNodeParameter('customer_id', i) as number;
+                    // Hole den optionalen Parameter type für den Query-String
+                    const type = this.getNodeParameter('type', i) as string | undefined;
+                    // Hole optional weitere Felder aus additionalFields
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+                    // Erstelle das Datenobjekt für den Request-Body
+                    const data: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(data, additionalFields);
+                    }
+
+                    // Baue das qs-Objekt dynamisch auf
+                    const qs: IDataObject = {};
+                    if (type !== undefined && type !== '') {
+                        qs.type = type;
+                    }
+
+                    // Erstelle die HTTP-Request-Optionen mit customerId als Pfadparameter
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'PUT',
+                        uri: `${baseUrl}/customers/${customerId}`,
+                        qs,
+                        json: true,
+                        body: data,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+
+            }
+            /* -------------------------------------------------------------------------- */
+            /*                              Customer Group                                */
+            /* -------------------------------------------------------------------------- */
+            if (resource === 'customerGroup') {
+                /* ╔══════════════════════════╗ */
+                /* ║  GET CUSTOMER GROUPS     ║ */
+                /* ╚══════════════════════════╝ */
+                if (operation === 'getCustomerGroups') {
+                    // Optionale zusätzliche Query-Parameter
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const qs: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/customer-groups`,
+                        json: true,
+                        qs,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔══════════════════════════╗ */
+                /* ║  CREATE CUSTOMER GROUP   ║ */
+                /* ╚══════════════════════════╝ */
+                if (operation === 'createCustomerGroup') {
+                    // Hole die Pflichtparameter und optionale Felder
+                    const name = this.getNodeParameter('name', i) as string;
+                    const description = this.getNodeParameter('description', i) as string | undefined;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const data: IDataObject = { name };
+
+                    if (description !== undefined && description !== '') {
+                        data.description = description;
+                    }
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(data, additionalFields);
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: data,
+                        uri: `${baseUrl}/customer-groups`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔══════════════════════════╗ */
+                /* ║  GET CUSTOMER GROUP      ║ */
+                /* ╚══════════════════════════╝ */
+                if (operation === 'getCustomerGroup') {
+                    const groupId = this.getNodeParameter('group_id', i) as number;
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/customer-groups/${groupId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔══════════════════════════╗ */
+                /* ║  UPDATE CUSTOMER GROUP   ║ */
+                /* ╚══════════════════════════╝ */
+                if (operation === 'updateCustomerGroup') {
+                    const groupId = this.getNodeParameter('group_id', i) as number;
+                    const name = this.getNodeParameter('name', i) as string | undefined;
+                    const description = this.getNodeParameter('description', i) as string | undefined;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const data: IDataObject = {};
+
+                    if (name !== undefined && name !== '') {
+                        data.name = name;
+                    }
+                    if (description !== undefined && description !== '') {
+                        data.description = description;
+                    }
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(data, additionalFields);
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'PUT',
+                        body: data,
+                        uri: `${baseUrl}/customer-groups/${groupId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔══════════════════════════╗ */
+                /* ║  DELETE CUSTOMER GROUP   ║ */
+                /* ╚══════════════════════════╝ */
+                if (operation === 'deleteCustomerGroup') {
+                    const groupId = this.getNodeParameter('group_id', i) as number;
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'DELETE',
+                        uri: `${baseUrl}/customer-groups/${groupId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+            }
+
+        }
+        // Rückgabe des Ergebnisses im n8n-Format
+        return [this.helpers.returnJsonArray(returnData)];
+    }
+
 }
+
+
