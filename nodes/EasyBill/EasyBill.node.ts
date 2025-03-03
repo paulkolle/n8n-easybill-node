@@ -245,14 +245,17 @@ export class EasyBill implements INodeType {
                         delete data.fixedcol_recurring_options;
                     }
 
-                    // Wenn itemsFixedCol vorhanden ist und das Feld itemsValues enthält, umwandeln
-                    if (
-                        data.itemsFixedCol &&
-                        typeof data.itemsFixedCol === 'object' &&
-                        'itemsValues' in data.itemsFixedCol
-                    ) {
-                        data.items = data.itemsFixedCol.itemsValues;
-                        delete data.itemsFixedCol;
+                    // If itemsFixedCol exists and contains the field itemsValues, transform it
+                    if (data.itemsFixedCol && typeof data.itemsFixedCol === 'object') {
+                        // Assert that itemsFixedCol is of type IDataObject so we can access 'itemsValues'
+                        const itemsFixedColObj = data.itemsFixedCol as IDataObject;
+                        if ('itemsValues' in itemsFixedColObj && itemsFixedColObj.itemsValues != null && Array.isArray(itemsFixedColObj.itemsValues)) {
+                            // Map over itemsValues to flatten the structure if nested under "test"
+                            data.items = (itemsFixedColObj.itemsValues as IDataObject[]).map((item: IDataObject) =>
+                                item.item ? item.item : item
+                            );
+                            delete data.itemsFixedCol;
+                        }
                     }
 
                     // Baue das qs-Objekt dynamisch auf
