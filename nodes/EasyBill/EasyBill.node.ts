@@ -110,7 +110,7 @@ export class EasyBill implements INodeType {
                 /* ╚═══════════════════╝ */
                 if (operation === 'createDocument') {
                     // Hole die Parameter (können auch undefined oder leer sein)
-                    const customerId = this.getNodeParameter('customer_id', i) as number | undefined;
+                    const customer_id = this.getNodeParameter('customer_id', i) as number | undefined;
                     const text = this.getNodeParameter('text', i) as string | undefined;
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
                     const itemsFixedCol = this.getNodeParameter('itemsFixedCol', i) as IDataObject;
@@ -118,8 +118,8 @@ export class EasyBill implements INodeType {
                     // Baue das Datenobjekt dynamisch auf
                     const data: IDataObject = {};
 
-                    if (customerId !== undefined) {
-                        data.customerId = customerId;
+                    if (customer_id !== undefined) {
+                        data.customer_id = customer_id;
                     }
 
                     if (text !== undefined && text !== '') {
