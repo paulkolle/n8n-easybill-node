@@ -174,7 +174,7 @@ export class EasyBill implements INodeType {
                         },
                         method: 'POST',
                         body: data,
-                        uri: `${baseUrl}`,
+                        uri: `${baseUrl}/documents`,
                         json: true,
                     };
 
