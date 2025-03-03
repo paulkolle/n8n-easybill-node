@@ -34,7 +34,7 @@
       "dist/credentials/EasyBillApi.credentials.ts"
     ],
     "nodes": [
-      "dist/nodes/NasaPics/EasyBillApi.node.ts"
+      "dist/nodes/EasyBill/EasyBillApi.node.ts"
     ]
   },
   "devDependencies": {
