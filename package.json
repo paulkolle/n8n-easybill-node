@@ -34,7 +34,7 @@
       "dist/credentials/EasyBillApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/EasyBill/EasyBillApi.node.js"
+      "dist/nodes/EasyBill/EasyBill.node.js"
     ]
   },
   "devDependencies": {
