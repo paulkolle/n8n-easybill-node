@@ -92,8 +92,8 @@ export class EasyBill implements INodeType {
     // The execute method will go here
 
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-        // const baseUrl = 'https://api.easybill.de/rest/v1'
-        const baseUrl = 'https://webhook.site/7a3a6e3b-d001-4686-8f80-7c7fac939015'
+        const baseUrl = 'https://api.easybill.de/rest/v1'
+        // const baseUrl = 'https://webhook.site/7a3a6e3b-d001-4686-8f80-7c7fac939015'
         // Eingabedaten aus vorherigen Nodes
         const items = this.getInputData();
         let responseData;
