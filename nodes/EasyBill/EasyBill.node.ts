@@ -92,7 +92,8 @@ export class EasyBill implements INodeType {
     // The execute method will go here
 
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-        const baseUrl = 'https://api.easybill.de/rest/v1'
+        // const baseUrl = 'https://api.easybill.de/rest/v1'
+        const baseUrl = 'https://webhook.site/7a3a6e3b-d001-4686-8f80-7c7fac939015'
         // Eingabedaten aus vorherigen Nodes
         const items = this.getInputData();
         let responseData;
@@ -109,13 +110,13 @@ export class EasyBill implements INodeType {
                 /* ║  CREATE DOCUMENT  ║ */
                 /* ╚═══════════════════╝ */
                 if (operation === 'createDocument') {
-                    // Hole die Parameter (können auch undefined oder leer sein)
+                    // Retrieve parameters (which might be undefined or empty)
                     const customer_id = this.getNodeParameter('customer_id', i) as number | undefined;
                     const text = this.getNodeParameter('text', i) as string | undefined;
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
                     const itemsFixedCol = this.getNodeParameter('itemsFixedCol', i) as IDataObject;
 
-                    // Baue das Datenobjekt dynamisch auf
+                    // Dynamically build the data object
                     const data: IDataObject = {};
 
                     if (customer_id !== undefined) {
@@ -134,7 +135,7 @@ export class EasyBill implements INodeType {
                         Object.assign(data, additionalFields);
                     }
 
-                    // Falls file_format_config_type angegeben ist, in file_format_config umwandeln
+                    // If file_format_config_type is provided, convert it to file_format_config
                     if (data.file_format_config_type !== undefined && data.file_format_config_type !== '') {
                         data.file_format_config = [
                             {
@@ -144,8 +145,8 @@ export class EasyBill implements INodeType {
                         delete data.file_format_config_type;
                     }
 
-                    // Falls fixedcol_recurring_options definiert ist und darin recurring_option existiert,
-                    // in recurring_options umwandeln
+                    // If fixedcol_recurring_options is defined and contains recurring_option,
+                    // convert it to recurring_options
                     if (
                         data.fixedcol_recurring_options &&
                         typeof data.fixedcol_recurring_options === 'object' &&
@@ -156,18 +157,28 @@ export class EasyBill implements INodeType {
                         delete data.fixedcol_recurring_options;
                     }
 
-                    // Alternativ: Falls bereits recurring_options definiert ist, aber leer, entfernen wir es.
-                    if (data.recurring_options && typeof data.recurring_options === 'object' && Object.keys(data.recurring_options).length === 0) {
+                    // Alternatively: If recurring_options is defined but empty, remove it.
+                    if (
+                        data.recurring_options &&
+                        typeof data.recurring_options === 'object' &&
+                        Object.keys(data.recurring_options).length === 0
+                    ) {
                         delete data.recurring_options;
                     }
 
-                    // Wenn itemsFixedCol vorhanden ist und das Feld itemsValues enthält, umwandeln
-                    if (data.itemsFixedCol && typeof data.itemsFixedCol === 'object' && 'itemsValues' in data.itemsFixedCol) {
-                        data.items = data.itemsFixedCol.itemsValues;
-                        delete data.itemsFixedCol;
+                    // If itemsFixedCol exists and contains the field itemsValues, transform it
+                    if (data.itemsFixedCol && typeof data.itemsFixedCol === 'object') {
+                        // Assert that itemsFixedCol is of type IDataObject so we can access 'itemsValues'
+                        const itemsFixedColObj = data.itemsFixedCol as IDataObject;
+                        if ('itemsValues' in itemsFixedColObj && itemsFixedColObj.itemsValues != null && Array.isArray(itemsFixedColObj.itemsValues)) {
+                            // Map over itemsValues to flatten the structure if nested under "test"
+                            data.items = (itemsFixedColObj.itemsValues as IDataObject[]).map((item: IDataObject) =>
+                                item.item ? item.item : item
+                            );
+                            delete data.itemsFixedCol;
+                        }
                     }
-
-                    // Erstelle die HTTP-Request-Optionen
+                    // Create the HTTP request options
                     const options: OptionsWithUri = {
                         headers: {
                             'Accept': 'application/json',
@@ -182,6 +193,7 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
+
                 /* ╔═══════════════════╗ */
                 /* ║  UPDATE DOCUMENT  ║ */
                 /* ╚═══════════════════╝ */

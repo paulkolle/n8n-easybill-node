@@ -511,139 +511,147 @@ export const documentFields: INodeProperties[] = [
 				displayName: 'Item',
 				values: [
 					{
-						"displayName": "Booking Account",
-						"name": "booking_account",
-						"type": "string",
-						"default": "",
-						"description": "The booking account associated with the item."
+						displayName: "Item",
+						name: "item",
+						type: "collection",
+						default: {},
+						options: [
+							{
+								"displayName": "Booking Account",
+								"name": "booking_account",
+								"type": "string",
+								"default": "",
+								"description": "The booking account associated with the item."
+							},
+							{
+								"displayName": "Cost Price Net",
+								"name": "cost_price_net",
+								"type": "number",
+								"default": "",
+								"description": "The net cost price of the item."
+							},
+							{
+								"displayName": "Description",
+								"name": "description",
+								"type": "string",
+								"default": "",
+								"description": "A brief description of the item."
+							},
+							{
+								"displayName": "Discount",
+								"name": "discount",
+								"type": "number",
+								"default": "",
+								"description": "The discount amount applied to the item."
+							},
+							{
+								"displayName": "Discount Type",
+								"name": "discount_type",
+								"type": "string",
+								"default": "",
+								"description": "The type of discount applied to the item."
+							},
+							{
+								"displayName": "Document Note",
+								"name": "document_note",
+								"type": "string",
+								"default": "Test Note",
+								"description": "A note associated with the item."
+							},
+							{
+								"displayName": "Export Cost 1",
+								"name": "export_cost_1",
+								"type": "number",
+								"default": "",
+								"description": "The first export cost related to the item."
+							},
+							{
+								"displayName": "Export Cost 2",
+								"name": "export_cost_2",
+								"type": "number",
+								"default": "",
+								"description": "The second export cost related to the item."
+							},
+							{
+								"displayName": "Item Type",
+								"name": "itemType",
+								"type": "string",
+								"default": "UNDEFINED",
+								"description": "The defined type of the item."
+							},
+							{
+								"displayName": "Number",
+								"name": "number",
+								"type": "string",
+								"default": "",
+								"description": "The item number."
+							},
+							{
+								"displayName": "Position",
+								"name": "position",
+								"type": "string",
+								"default": "",
+								"description": "The position identifier of the item."
+							},
+							{
+								"displayName": "Position ID",
+								"name": "position_id",
+								"type": "string",
+								"default": "",
+								"description": "The identifier for the item position."
+							},
+							{
+								"displayName": "Quantity",
+								"name": "quantity",
+								"type": "number",
+								"default": 1,
+								"description": "The quantity of the item."
+							},
+							{
+								"displayName": "Quantity (String)",
+								"name": "quantity_str",
+								"type": "string",
+								"default": "",
+								"description": "The quantity as a string."
+							},
+							{
+								"displayName": "Single Price Gross",
+								"name": "single_price_gross",
+								"type": "number",
+								"default": 0,
+								"description": "The gross unit price of the item."
+							},
+							{
+								"displayName": "Single Price Net",
+								"name": "single_price_net",
+								"type": "number",
+								"default": 5000,
+								"description": "The net unit price of the item."
+							},
+							{
+								"displayName": "Type",
+								"name": "type",
+								"type": "string",
+								"default": "POSITION",
+								"description": "The type of the item."
+							},
+							{
+								"displayName": "Unit",
+								"name": "unit",
+								"type": "string",
+								"default": "",
+								"description": "The unit of measurement for the item."
+							},
+							{
+								"displayName": "VAT Percent",
+								"name": "vat_percent",
+								"type": "number",
+								"default": 0,
+								"description": "The VAT percentage applied to the item."
+							}
+						]
 					},
-					{
-						"displayName": "Cost Price Net",
-						"name": "cost_price_net",
-						"type": "number",
-						"default": "",
-						"description": "The net cost price of the item."
-					},
-					{
-						"displayName": "Description",
-						"name": "description",
-						"type": "string",
-						"default": "",
-						"description": "A brief description of the item."
-					},
-					{
-						"displayName": "Discount",
-						"name": "discount",
-						"type": "number",
-						"default": "",
-						"description": "The discount amount applied to the item."
-					},
-					{
-						"displayName": "Discount Type",
-						"name": "discount_type",
-						"type": "string",
-						"default": "",
-						"description": "The type of discount applied to the item."
-					},
-					{
-						"displayName": "Document Note",
-						"name": "document_note",
-						"type": "string",
-						"default": "Test Note",
-						"description": "A note associated with the item."
-					},
-					{
-						"displayName": "Export Cost 1",
-						"name": "export_cost_1",
-						"type": "number",
-						"default": "",
-						"description": "The first export cost related to the item."
-					},
-					{
-						"displayName": "Export Cost 2",
-						"name": "export_cost_2",
-						"type": "number",
-						"default": "",
-						"description": "The second export cost related to the item."
-					},
-					{
-						"displayName": "Item Type",
-						"name": "itemType",
-						"type": "string",
-						"default": "UNDEFINED",
-						"description": "The defined type of the item."
-					},
-					{
-						"displayName": "Number",
-						"name": "number",
-						"type": "string",
-						"default": "",
-						"description": "The item number."
-					},
-					{
-						"displayName": "Position",
-						"name": "position",
-						"type": "string",
-						"default": "",
-						"description": "The position identifier of the item."
-					},
-					{
-						"displayName": "Position ID",
-						"name": "position_id",
-						"type": "string",
-						"default": "",
-						"description": "The identifier for the item position."
-					},
-					{
-						"displayName": "Quantity",
-						"name": "quantity",
-						"type": "number",
-						"default": 1,
-						"description": "The quantity of the item."
-					},
-					{
-						"displayName": "Quantity (String)",
-						"name": "quantity_str",
-						"type": "string",
-						"default": "",
-						"description": "The quantity as a string."
-					},
-					{
-						"displayName": "Single Price Gross",
-						"name": "single_price_gross",
-						"type": "number",
-						"default": 0,
-						"description": "The gross unit price of the item."
-					},
-					{
-						"displayName": "Single Price Net",
-						"name": "single_price_net",
-						"type": "number",
-						"default": 5000,
-						"description": "The net unit price of the item."
-					},
-					{
-						"displayName": "Type",
-						"name": "type",
-						"type": "string",
-						"default": "POSITION",
-						"description": "The type of the item."
-					},
-					{
-						"displayName": "Unit",
-						"name": "unit",
-						"type": "string",
-						"default": "",
-						"description": "The unit of measurement for the item."
-					},
-					{
-						"displayName": "VAT Percent",
-						"name": "vat_percent",
-						"type": "number",
-						"default": 0,
-						"description": "The VAT percentage applied to the item."
-					}
-				],
+				]
 			},
 		],
 		displayOptions: {
@@ -658,6 +666,7 @@ export const documentFields: INodeProperties[] = [
 			},
 		},
 	},
+
 	{
 		displayName: "Text",
 		name: "text",
