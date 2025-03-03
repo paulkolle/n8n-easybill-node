@@ -15,6 +15,8 @@ import {
 import {
     OptionsWithUri,
 } from 'request';
+import { discountOperations } from './Discount/DiscountOperations';
+import { discountFields } from './Discount/DiscountFields';
 
 
 /**
@@ -70,7 +72,8 @@ export class EasyBill implements INodeType {
                 options: [
                     { name: 'Customer', value: 'customer', },
                     { name: 'Document', value: 'document', },
-                    // { name: 'Customer Group', value: 'customerGroup', },
+                    { name: 'Customer Group', value: 'customerGroup', },
+                    { name: 'Discount', value: 'discount', },
 
                     // Weitere Ressourcen können hier ergänzt werden.
                 ],
@@ -81,14 +84,16 @@ export class EasyBill implements INodeType {
             ...documentFields,
             ...customerOperations,
             ...customerFields,
-            // ...customerGroupOperations,
-            // ...customerGroupFields
+            ...customerGroupOperations,
+            ...customerGroupFields,
+            ...discountOperations,
+            ...discountFields,
         ],
     };
     // The execute method will go here
 
     async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-        const baseUrl = 'https://webhook.site/7a3a6e3b-d001-4686-8f80-7c7fac939015'
+        const baseUrl = 'https://api.easybill.de/rest/v1'
         // Eingabedaten aus vorherigen Nodes
         const items = this.getInputData();
         let responseData;
@@ -715,15 +720,13 @@ export class EasyBill implements INodeType {
                 if (operation === 'createCustomerGroup') {
                     // Hole die Pflichtparameter und optionale Felder
                     const name = this.getNodeParameter('name', i) as string;
+                    const number = this.getNodeParameter('number', i) as number;
                     const description = this.getNodeParameter('description', i) as string | undefined;
-                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-                    const data: IDataObject = { name };
+
+                    const data: IDataObject = { name, number };
 
                     if (description !== undefined && description !== '') {
                         data.description = description;
-                    }
-                    if (additionalFields && Object.keys(additionalFields).length > 0) {
-                        Object.assign(data, additionalFields);
                     }
 
                     const options: OptionsWithUri = {
@@ -763,7 +766,7 @@ export class EasyBill implements INodeType {
                     const groupId = this.getNodeParameter('group_id', i) as number;
                     const name = this.getNodeParameter('name', i) as string | undefined;
                     const description = this.getNodeParameter('description', i) as string | undefined;
-                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const number = this.getNodeParameter('number', i) as number;
                     const data: IDataObject = {};
 
                     if (name !== undefined && name !== '') {
@@ -772,8 +775,8 @@ export class EasyBill implements INodeType {
                     if (description !== undefined && description !== '') {
                         data.description = description;
                     }
-                    if (additionalFields && Object.keys(additionalFields).length > 0) {
-                        Object.assign(data, additionalFields);
+                    if (number !== undefined) {
+                        data.number = number;
                     }
 
                     const options: OptionsWithUri = {
@@ -802,6 +805,406 @@ export class EasyBill implements INodeType {
                         uri: `${baseUrl}/customer-groups/${groupId}`,
                         json: true,
                     };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+            }
+            /* -------------------------------------------------------------------------- */
+            /*                                  Discount                                */
+            /* -------------------------------------------------------------------------- */
+            if (resource === 'discount') {
+                /* ╔════════════════════════════════════╗ */
+                /* ║  GET POSITION DISCOUNTS            ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'getDiscountsPosition') {
+                    // Optionale zusätzliche Query-Parameter
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const qs: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/discounts/position`,
+                        json: true,
+                        qs,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  CREATE POSITION DISCOUNT          ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'createDiscountPosition') {
+                    // Pflichtparameter und optionale Felder
+                    const position_id = this.getNodeParameter('position_id', i) as number;
+                    const customer_id = this.getNodeParameter('customer_id', i) as string;
+                    const discount = this.getNodeParameter('discount', i) as number | undefined;
+                    const discount_type = this.getNodeParameter('discount_type', i) as string | undefined;
+
+                    const data: IDataObject = { position_id, customer_id };
+
+                    if (discount !== undefined) {
+                        data.discount = discount;
+                    }
+                    if (discount_type !== undefined && discount_type !== '') {
+                        data.discount_type = discount_type;
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: data,
+                        uri: `${baseUrl}/discounts/position`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  GET POSITION DISCOUNT             ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'getDiscountPosition') {
+                    const discountId = this.getNodeParameter('discount_id', i) as number;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+                    const qs: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/discounts/position/${discountId}`,
+                        json: true,
+                        qs,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  UPDATE POSITION DISCOUNT          ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'updateDiscountPosition') {
+                    // Pflichtparameter und optionale Felder
+                    const discountId = this.getNodeParameter('discount_id', i) as number;
+                    const position_id = this.getNodeParameter('position_id', i) as number | undefined;
+                    const customer_id = this.getNodeParameter('customer_id', i) as string | undefined;
+                    const discount = this.getNodeParameter('discount', i) as number | undefined;
+                    const discount_type = this.getNodeParameter('discount_type', i) as string | undefined;
+
+                    const data: IDataObject = { position_id, customer_id };
+
+                    if (discount !== undefined) {
+                        data.discount = discount;
+                    }
+                    if (discount_type !== undefined && discount_type !== '') {
+                        data.discount_type = discount_type;
+                    }
+                    if (position_id !== undefined) {
+                        data.position_id = position_id;
+                    }
+                    if (customer_id !== undefined) {
+                        data.customer_id = customer_id;
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'PUT',
+                        body: data,
+                        uri: `${baseUrl}/discounts/position/${discountId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  DELETE POSITION DISCOUNT          ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'deleteDiscountPosition') {
+                    const discountId = this.getNodeParameter('discount_id', i) as number;
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'DELETE',
+                        uri: `${baseUrl}/discounts/position/${discountId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+
+                // ────────────────────────────────────────────────────────────────────────────────
+                // Operationen für Position-Group Rabatte
+                // ────────────────────────────────────────────────────────────────────────────────
+
+                /* ╔════════════════════════════════════╗ */
+                /* ║  GET POSITION GROUP DISCOUNTS      ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'getDiscountsPositionGroup') {
+                    // Optionale zusätzliche Query-Parameter
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const qs: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/discounts/position-group`,
+                        json: true,
+                        qs,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  CREATE POSITION GROUP DISCOUNT    ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'createDiscountPositionGroup') {
+                    // Pflichtparameter und optionale Felder
+                    const position_id = this.getNodeParameter('position_id', i) as number;
+                    const customer_id = this.getNodeParameter('customer_id', i) as string;
+                    const discount = this.getNodeParameter('discount', i) as number | undefined;
+                    const discount_type = this.getNodeParameter('discount_type', i) as string | undefined;
+
+                    const data: IDataObject = { position_id, customer_id };
+
+                    if (discount !== undefined) {
+                        data.discount = discount;
+                    }
+                    if (discount_type !== undefined && discount_type !== '') {
+                        data.discount_type = discount_type;
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: data,
+                        uri: `${baseUrl}/discounts/position-group`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  GET POSITION GROUP DISCOUNT       ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'getDiscountPositionGroup') {
+                    const discountId = this.getNodeParameter('discount_id', i) as number;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+
+                    const qs: IDataObject = {};
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/discounts/position-group/${discountId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  UPDATE POSITION GROUP DISCOUNT    ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'updateDiscountPositionGroup') {
+                    // Pflichtparameter und optionale Felder
+                    const discountId = this.getNodeParameter('discount_id', i) as number;
+                    const position_id = this.getNodeParameter('position_id', i) as number | undefined;
+                    const customer_id = this.getNodeParameter('customer_id', i) as string | undefined;
+                    const discount = this.getNodeParameter('discount', i) as number | undefined;
+                    const discount_type = this.getNodeParameter('discount_type', i) as string | undefined;
+
+                    const data: IDataObject = { position_id, customer_id };
+
+                    if (discount !== undefined) {
+                        data.discount = discount;
+                    }
+                    if (discount_type !== undefined && discount_type !== '') {
+                        data.discount_type = discount_type;
+                    }
+                    if (position_id !== undefined) {
+                        data.position_id = position_id;
+                    }
+                    if (customer_id !== undefined) {
+                        data.customer_id = customer_id;
+                    }
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'PUT',
+                        body: data,
+                        uri: `${baseUrl}/discounts/position-group/${discountId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  DELETE POSITION GROUP DISCOUNT    ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'deleteDiscountPositionGroup') {
+                    const discountId = this.getNodeParameter('discount_id', i) as number;
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'DELETE',
+                        uri: `${baseUrl}/discounts/position-group/${discountId}`,
+                        json: true,
+                    };
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+            }
+            /* -------------------------------------------------------------------------- */
+            /*                            Document Payment                              */
+            /* -------------------------------------------------------------------------- */
+            if (resource === 'documentPayment') {
+                /* ╔════════════════════════════════════╗ */
+                /* ║  GET DOCUMENT PAYMENTS LIST        ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'getDocumentPayments') {
+                    // Hole optionale Parameter: limit, page und weitere Query-Parameter
+                    const limit = this.getNodeParameter('limit', i) as number | undefined;
+                    const page = this.getNodeParameter('page', i) as number | undefined;
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    const qs: IDataObject = {};
+
+                    if (limit !== undefined) {
+                        qs.limit = limit;
+                    }
+                    if (page !== undefined) {
+                        qs.page = page;
+                    }
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/document-payments`,
+                        json: true,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+
+                /* ╔════════════════════════════════════╗ */
+                /* ║  CREATE DOCUMENT PAYMENT           ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'createDocumentPayment') {
+                    // Retrieve required fields
+                    const amount = this.getNodeParameter('amount', i) as number;
+                    const documentId = this.getNodeParameter('documentId', i) as number;
+
+                    // Build the JSON body with required fields only
+                    const body: IDataObject = {
+                        amount,
+                        document_id: documentId,
+                    };
+
+                    // Retrieve optional query parameter "paid"
+                    const paid = this.getNodeParameter('paid', i) as boolean | undefined;
+                    const qs: IDataObject = {};
+                    if (paid !== undefined) {
+                        qs.paid = paid;
+                    }
+
+                    // Merge additional fields into qs using Object.assign if they exist
+                    const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+                    if (additionalFields && Object.keys(additionalFields).length > 0) {
+                        Object.assign(qs, additionalFields);
+                    }
+
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        uri: `${baseUrl}/document-payments`,
+                        json: true,
+                        body,
+                        qs,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+                /* ╔════════════════════════════════════╗ */
+                /* ║  GET DOCUMENT PAYMENT              ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'getDocumentPayment') {
+                    // Hole den Pflichtparameter document_payment_id
+                    const id = this.getNodeParameter('document_payment_id', i) as number;
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'GET',
+                        uri: `${baseUrl}/document-payments/${id}`,
+                        json: true,
+                    };
+
+                    //@ts-ignore
+                    responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
+                    returnData.push(responseData);
+                }
+
+                /* ╔════════════════════════════════════╗ */
+                /* ║  DELETE DOCUMENT PAYMENT           ║ */
+                /* ╚════════════════════════════════════╝ */
+                if (operation === 'deleteDocumentPayment') {
+                    // Hole den Pflichtparameter document_payment_id
+                    const id = this.getNodeParameter('document_payment_id', i) as number;
+                    const options: OptionsWithUri = {
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        method: 'DELETE',
+                        uri: `${baseUrl}/document-payments/${id}`,
+                        json: true,
+                    };
+
                     //@ts-ignore
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);

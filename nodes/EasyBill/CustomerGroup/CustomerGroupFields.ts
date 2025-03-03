@@ -1,6 +1,24 @@
 import { INodeProperties } from 'n8n-workflow';
 
 export const customerGroupFields: INodeProperties[] = [
+
+	/* ╔══════════════════════════════════════════════════╗ */
+	/* ║  CUSTOMER GROUP ID FÜR VERSCHIEDENE OPERATIONEN  ║ */
+	/* ╚══════════════════════════════════════════════════╝ */
+	{
+		displayName: 'Customer Group ID',
+		name: 'group_id',
+		type: 'string',
+		default: '',
+		description: 'Die ID der Customer Group',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['customerGroup'],
+				operation: ['getCustomerGroup', 'updateCustomerGroup', 'deleteCustomerGroup',],
+			},
+		},
+	},
 	/* ╔══════════════════════════╗ */
 	/* ║  GET CUSTOMER GROUPS     ║ */
 	/* ╚══════════════════════════╝ */
@@ -10,21 +28,24 @@ export const customerGroupFields: INodeProperties[] = [
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
-		description: 'Zusätzliche Query-Parameter für die Customer Groups',
+		description: 'Additional query parameters for the Customer Groups',
 		options: [
 			{
 				displayName: 'Limit',
 				name: 'limit',
 				type: 'number',
+				typeOptions: {
+					minValue: 1,
+				},
 				default: 50,
-				description: 'Maximale Anzahl der Ergebnisse',
+				description: 'Max number of results to return',
 			},
 			{
 				displayName: 'Page',
 				name: 'page',
 				type: 'number',
 				default: 1,
-				description: 'Seitenzahl',
+				description: 'Page number',
 			},
 		],
 		displayOptions: {
@@ -34,10 +55,9 @@ export const customerGroupFields: INodeProperties[] = [
 			},
 		},
 	},
-
-	/* ╔══════════════════════════════╗ */
-	/* ║  CREATE CUSTOMER GROUP       ║ */
-	/* ╚══════════════════════════════╝ */
+	/* ╔═════════════════════════╗ */
+	/* ║  CREATE CUSTOMER GROUP  ║ */
+	/* ╚═════════════════════════╝ */
 	{
 		displayName: 'Name',
 		name: 'name',
@@ -48,21 +68,21 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['createCustomerGroup'],
+				operation: ['createCustomerGroup',],
 			},
 		},
 	},
-    {
+	{
 		displayName: 'Number',
 		name: 'number',
-		type: 'number',
+		type: 'string',
 		default: '',
 		description: 'Name der Customer Group - Can be chosen freely',
 		required: true,
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['createCustomerGroup'],
+				operation: ['createCustomerGroup',],
 			},
 		},
 	},
@@ -75,47 +95,13 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['createCustomerGroup'],
+				operation: ['createCustomerGroup',],
 			},
 		},
 	},
-
-
-	/* ╔══════════════════════════╗ */
-	/* ║  GET CUSTOMER GROUP      ║ */
-	/* ╚══════════════════════════╝ */
-	{
-		displayName: 'Customer Group ID',
-		name: 'group_id',
-		type: 'string',
-		default: '',
-		description: 'Die ID der Customer Group',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['customerGroup'],
-				operation: ['getCustomerGroup'],
-			},
-		},
-	},
-
-	/* ╔══════════════════════════════╗ */
-	/* ║  UPDATE CUSTOMER GROUP       ║ */
-	/* ╚══════════════════════════════╝ */
-	{
-		displayName: 'Customer Group ID',
-		name: 'group_id',
-		type: 'string',
-		default: '',
-		description: 'Die ID der Customer Group',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup'],
-			},
-		},
-	},
+	/* ╔═════════════════════════╗ */
+	/* ║  UPDATE CUSTOMER GROUP  ║ */
+	/* ╚═════════════════════════╝ */
 	{
 		displayName: 'Name',
 		name: 'name',
@@ -125,7 +111,20 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup'],
+				operation: ['updateCustomerGroup',],
+			},
+		},
+	},
+	{
+		displayName: 'Number',
+		name: 'number',
+		type: 'string',
+		default: '',
+		description: 'Name der Customer Group - Can be chosen freely',
+		displayOptions: {
+			show: {
+				resource: ['customerGroup'],
+				operation: ['updateCustomerGroup',],
 			},
 		},
 	},
@@ -138,49 +137,8 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup'],
+				operation: ['updateCustomerGroup',],
 			},
 		},
 	},
-	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		description: 'Weitere Felder für das Update',
-		displayOptions: {
-			show: {
-				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup'],
-			},
-		},
-		options: [
-			{
-				displayName: 'External ID',
-				name: 'external_id',
-				type: 'string',
-				default: '',
-				description: 'Externe Kennung',
-			},
-		],
-	},
-
-	/* ╔══════════════════════════╗ */
-	/* ║  DELETE CUSTOMER GROUP   ║ */
-	/* ╚══════════════════════════╝ */
-	{
-		displayName: 'Customer Group ID',
-		name: 'group_id',
-		type: 'string',
-		default: '',
-		description: 'Die ID der Customer Group',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['customerGroup'],
-				operation: ['deleteCustomerGroup'],
-			},
-		},
-	},
-];
+]
