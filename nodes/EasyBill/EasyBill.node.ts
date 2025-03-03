@@ -54,8 +54,7 @@ export class EasyBill implements INodeType {
             },
         ],
         requestDefaults: {
-            // baseURL: 'https://api.easybill.de/rest/v1',
-            baseURL: 'https://webhook.site/a51c3921-8a81-4fcb-8834-805a12bf8f8f',
+            baseURL: 'https://api.easybill.de/rest/v1',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',

@@ -31,7 +31,7 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/EasyBillApi.credentials.ts"
+      "dist/credentials/EasyBillApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/EasyBill/EasyBillApi.node.js"
