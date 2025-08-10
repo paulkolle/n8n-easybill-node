@@ -170,18 +170,25 @@ export const customerFields: INodeProperties[] = [
                     "description": "City"
                 },
                 {
-                    "displayName": "State",
-                    "name": "state",
-                    "type": "string",
-                    "default": "NRW",
-                    "description": "State"
-                },
-                {
                     "displayName": "Country",
                     "name": "country",
                     "type": "string",
                     "default": "DE",
                     "description": "Country"
+                },
+                {
+                    "displayName": "Delivery First Name",
+                    "name": "delivery_first_name",
+                    "type": "string",
+                    "default": "Erika",
+                    "description": "Delivery first name"
+                },
+                {
+                    "displayName": "Delivery Last Name",
+                    "name": "delivery_last_name",
+                    "type": "string",
+                    "default": "Mustermann",
+                    "description": "Delivery last name"
                 },
                 {
                     "displayName": "Delivery Title",
@@ -198,7 +205,21 @@ export const customerFields: INodeProperties[] = [
                     "description": "Delivery state"
                 },
                 {
-                    "displayName": "email",
+                    "displayName": "Delivery Suffix 1",
+                    "name": "delivery_suffix_1",
+                    "type": "string",
+                    "default": "Hinterhaus",
+                    "description": "Delivery suffix 1"
+                },
+                {
+                    "displayName": "Delivery Suffix 2",
+                    "name": "delivery_suffix_2",
+                    "type": "string",
+                    "default": "3. Etage",
+                    "description": "Delivery suffix 2"
+                },
+                {
+                    "displayName": "Email",
                     "name": "emails",
                     "type": "string",
                     "default": "max.mustermann@easybill.de",
@@ -226,11 +247,42 @@ export const customerFields: INodeProperties[] = [
                     "description": "Grace period (days)"
                 },
                 {
+                    "displayName": "Group ID",
+                    "name": "group_id",
+                    "type": "number",
+                    "typeOptions": {
+                        minValue: 0,
+                    },
+                    "default": 1,
+                    "description": "Group ID"
+                },
+                {
+                    "displayName": "Info 1",
+                    "name": "info_1",
+                    "type": "string",
+                    "default": "Kundennummer: 12345",
+                    "description": "Additional information about the customer"
+                },
+                {
+                    "displayName": "Info 2",
+                    "name": "info_2",
+                    "type": "string",
+                    "default": "Abteilung: Einkauf",
+                    "description": "Additional information about the customer"
+                },
+                {
                     "displayName": "Internet",
                     "name": "internet",
                     "type": "string",
                     "default": "https://www.easybill.de",
                     "description": "Website URL"
+                },
+                {
+                    "displayName": "Number",
+                    "name": "number",
+                    "type": "string",
+                    "default": "123456789",
+                    "description": "Number of the customer. If not provided, it will be generated automatically based on the type."
                 },
                 {
                     "displayName": "Phone 1",
@@ -240,11 +292,76 @@ export const customerFields: INodeProperties[] = [
                     "description": "Primary phone number"
                 },
                 {
+                    "displayName": "Salutation",
+                    "name": "salutation",
+                    "type": "options",
+                    "default": "0",
+                    "description": "Salutation",
+                    "options": [
+                        {
+                            name: "Nothing",
+                            value: "0",
+                        },
+                        {
+                            name: "Mr.",
+                            value: "1",
+                        },
+                        {
+                            name: "Mrs.",
+                            value: "2",
+                        },
+                        {
+                            name: "Company",
+                            value: "3",
+                        },
+                        {
+                            name: "Mr. & Mrs.",
+                            value: "4",
+                        },
+                        {
+                            name: "Married Couple",
+                            value: "5",
+                        },
+                        {
+                            name: "Family",
+                            value: "6",
+                        }
+                    ],
+                },
+                {
+                    "displayName": "SEPA Agreement Date",
+                    "name": "sepa_agreement_date",
+                    "type": "string",
+                    "default": null,
+                    "description": "SEPA agreement date (YYYY-MM-DD)"
+                },
+                {
+                    "displayName": "SEPA Mandate Reference",
+                    "name": "sepa_mandate_reference",
+                    "type": "string",
+                    "default": null,
+                    "description": "SEPA mandate reference"
+                },
+                {
+                    "displayName": "State",
+                    "name": "state",
+                    "type": "string",
+                    "default": "NRW",
+                    "description": "State"
+                },
+                {
                     "displayName": "Street",
                     "name": "street",
                     "type": "string",
                     "default": "Düsselstr. 21",
                     "description": "Street address"
+                },
+                {
+                    "displayName": "Title",
+                    "name": "title",
+                    "type": "string",
+                    "default": "Cr.",
+                    "description": "Title"
                 },
                 {
                     "displayName": "Zip Code",
@@ -405,13 +522,6 @@ export const customerFields: INodeProperties[] = [
                     "description": "City"
                 },
                 {
-                    "displayName": "State",
-                    "name": "state",
-                    "type": "string",
-                    "default": "NRW",
-                    "description": "State"
-                },
-                {
                     "displayName": "Company Name",
                     "name": "company_name",
                     "type": "string",
@@ -424,6 +534,20 @@ export const customerFields: INodeProperties[] = [
                     "type": "string",
                     "default": "DE",
                     "description": "Country"
+                },
+                {
+                    "displayName": "Delivery First Name",
+                    "name": "delivery_first_name",
+                    "type": "string",
+                    "default": "Erika",
+                    "description": "Delivery first name"
+                },
+                {
+                    "displayName": "Delivery Last Name",
+                    "name": "delivery_last_name",
+                    "type": "string",
+                    "default": "Mustermann",
+                    "description": "Delivery last name"
                 },
                 {
                     "displayName": "Delivery Title",
@@ -440,7 +564,21 @@ export const customerFields: INodeProperties[] = [
                     "description": "Delivery state"
                 },
                 {
-                    "displayName": "email",
+                    "displayName": "Delivery Suffix 1",
+                    "name": "delivery_suffix_1",
+                    "type": "string",
+                    "default": "Hinterhaus",
+                    "description": "Delivery suffix 1"
+                },
+                {
+                    "displayName": "Delivery Suffix 2",
+                    "name": "delivery_suffix_2",
+                    "type": "string",
+                    "default": "3. Etage",
+                    "description": "Delivery suffix 2"
+                },
+                {
+                    "displayName": "Email",
                     "name": "emails",
                     "type": "string",
                     "default": "max.mustermann@easybill.de",
@@ -468,6 +606,30 @@ export const customerFields: INodeProperties[] = [
                     "description": "Grace period (days)"
                 },
                 {
+                    "displayName": "Group ID",
+                    "name": "group_id",
+                    "type": "number",
+                    "typeOptions": {
+                        minValue: 0,
+                    },
+                    "default": 1,
+                    "description": "Group ID"
+                },
+                {
+                    "displayName": "Info 1",
+                    "name": "info_1",
+                    "type": "string",
+                    "default": "Kundennummer: 12345",
+                    "description": "Additional information about the customer"
+                },
+                {
+                    "displayName": "Info 2",
+                    "name": "info_2",
+                    "type": "string",
+                    "default": "Abteilung: Einkauf",
+                    "description": "Additional information about the customer"
+                },
+                {
                     "displayName": "Last Name",
                     "name": "last_name",
                     "type": "string",
@@ -482,6 +644,13 @@ export const customerFields: INodeProperties[] = [
                     "description": "Website URL"
                 },
                 {
+                    "displayName": "Number",
+                    "name": "number",
+                    "type": "string",
+                    "default": "123456789",
+                    "description": "Number of the customer. If not provided, it will be generated automatically based on the type."
+                },
+                {
                     "displayName": "Phone 1",
                     "name": "phone_1",
                     "type": "string",
@@ -489,11 +658,76 @@ export const customerFields: INodeProperties[] = [
                     "description": "Primary phone number"
                 },
                 {
+                    "displayName": "Salutation",
+                    "name": "salutation",
+                    "type": "options",
+                    "default": "0",
+                    "description": "Salutation",
+                    "options": [
+                        {
+                            name: "Nothing",
+                            value: "0",
+                        },
+                        {
+                            name: "Mr.",
+                            value: "1",
+                        },
+                        {
+                            name: "Mrs.",
+                            value: "2",
+                        },
+                        {
+                            name: "Company",
+                            value: "3",
+                        },
+                        {
+                            name: "Mr. & Mrs.",
+                            value: "4",
+                        },
+                        {
+                            name: "Married Couple",
+                            value: "5",
+                        },
+                        {
+                            name: "Family",
+                            value: "6",
+                        }
+                    ],
+                },
+                {
+                    "displayName": "SEPA Agreement Date",
+                    "name": "sepa_agreement_date",
+                    "type": "string",
+                    "default": null,
+                    "description": "SEPA agreement date (YYYY-MM-DD)"
+                },
+                {
+                    "displayName": "SEPA Mandate Reference",
+                    "name": "sepa_mandate_reference",
+                    "type": "string",
+                    "default": null,
+                    "description": "SEPA mandate reference"
+                },
+                {
+                    "displayName": "State",
+                    "name": "state",
+                    "type": "string",
+                    "default": "NRW",
+                    "description": "State"
+                },
+                {
                     "displayName": "Street",
                     "name": "street",
                     "type": "string",
                     "default": "Düsselstr. 21",
                     "description": "Street address"
+                },
+                {
+                    "displayName": "Title",
+                    "name": "title",
+                    "type": "string",
+                    "default": "Cr.",
+                    "description": "Title"
                 },
                 {
                     "displayName": "Zip Code",
