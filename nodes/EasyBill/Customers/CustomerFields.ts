@@ -329,6 +329,31 @@ export const customerFields: INodeProperties[] = [
                     ],
                 },
                 {
+                    "displayName": "SEPA Agreement",
+                    "name": "sepa_agreement",
+                    "type": "options",
+                    "default": "NULL",
+                    "description": "SEPA agreement",
+                    "options": [
+                        {
+                            name: "SEPA Core Direct Debit",
+                            value: "BASIC",
+                        },
+                        {
+                            name: "SEPA Core Direct Debit COR1 (Deprecated Use BASIC Instead)",
+                            value: "COR1",
+                        },
+                        {
+                            name: "SEPA Business-to-Business Direct Debit",
+                            value: "COMPANY",
+                        },
+                        {
+                            name: "No Mandate Issued Yet",
+                            value: "NULL",
+                        }
+                    ]
+                },
+                {
                     "displayName": "SEPA Agreement Date",
                     "name": "sepa_agreement_date",
                     "type": "string",
@@ -693,6 +718,31 @@ export const customerFields: INodeProperties[] = [
                             value: "6",
                         }
                     ],
+                },
+                {
+                    "displayName": "SEPA Agreement",
+                    "name": "sepa_agreement",
+                    "type": "options",
+                    "default": "NULL",
+                    "description": "SEPA agreement",
+                    "options": [
+                        {
+                            name: "SEPA Core Direct Debit",
+                            value: "BASIC",
+                        },
+                        {
+                            name: "SEPA Core Direct Debit COR1 (Deprecated Use BASIC Instead)",
+                            value: "COR1",
+                        },
+                        {
+                            name: "SEPA Business-to-Business Direct Debit",
+                            value: "COMPANY",
+                        },
+                        {
+                            name: "No Mandate Issued Yet",
+                            value: "NULL",
+                        }
+                    ]
                 },
                 {
                     "displayName": "SEPA Agreement Date",
