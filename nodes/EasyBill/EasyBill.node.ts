@@ -1,4 +1,4 @@
-import { INodeType, INodeTypeDescription } from 'n8n-workflow';
+import { INodeType, INodeTypeDescription, sleep } from 'n8n-workflow';
 // import { NodeConnectionType } from 'n8n-workflow';
 import { customerOperations } from './Customers/CustomerOperations';
 import { customerFields } from './Customers/CustomerFields';
@@ -78,6 +78,58 @@ export class EasyBill implements INodeType {
                 ],
                 default: 'document',
             },
+            {
+                displayName: 'Options',
+                name: 'options',
+                type: 'collection',
+                placeholder: 'Add option',
+                default: {},
+                options: [
+                    {
+                        displayName: 'Batching',
+                        name: 'batching',
+                        placeholder: 'Add Batching',
+                        type: 'fixedCollection',
+                        typeOptions: {
+                            multipleValues: false,
+                        },
+                        default: {
+                            batch: {},
+                        },
+                        options: [
+                            {
+                                displayName: 'Batching',
+                                name: 'batch',
+                                values: [
+                                    {
+                                        displayName: 'Items per Batch',
+                                        name: 'batchSize',
+                                        type: 'number',
+                                        typeOptions: {
+                                            minValue: -1,
+                                        },
+                                        default: 50,
+                                        description:
+                                            'Input will be split in batches to throttle requests. -1 for disabled. 0 will be treated as 1.',
+                                    },
+                                    {
+                                        // eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
+                                        displayName: 'Batch Interval (ms)',
+                                        name: 'batchInterval',
+                                        type: 'number',
+                                        typeOptions: {
+                                            minValue: 0,
+                                        },
+                                        default: 1000,
+                                        description:
+                                            'Time (in milliseconds) between each batch of requests. 0 for disabled.',
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
 
             ...documentOperations,
             ...documentFields,
@@ -102,6 +154,22 @@ export class EasyBill implements INodeType {
         const operation = this.getNodeParameter('operation', 0) as string;
 
         for (let i = 0; i < items.length; i++) {
+            const {
+                batching,
+            } = this.getNodeParameter('options', i, {}) as {
+                batching: { batch: { batchSize: number; batchInterval: number } };
+            };
+
+            // defaults batch size to 1 of it's set to 0
+            const batchSize = batching?.batch?.batchSize > 0 ? batching?.batch?.batchSize : 1;
+            const batchInterval = batching?.batch.batchInterval;
+
+            if (i > 0 && batchSize >= 0 && batchInterval > 0) {
+                if (i % batchSize === 0) {
+                    await sleep(batchInterval);
+                }
+            }
+
             /* -------------------------------------------------------------------------- */
             /*                                 Document                                   */
             /* -------------------------------------------------------------------------- */
