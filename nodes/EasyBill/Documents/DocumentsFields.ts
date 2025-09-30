@@ -12,6 +12,34 @@ import { INodeProperties } from 'n8n-workflow'
  * die zur aktuell gewählten Operation passen.
  */
 export const documentFields: INodeProperties[] = [
+	/* ╔═══════════════╗ */
+	/* ║  DOCUMENT ID  ║ */
+	/* ╚═══════════════╝ */
+	{
+		displayName: 'Document ID',
+		name: 'document_id',
+		type: 'string',
+		default: '',
+		description: 'Die ID des Dokuments',
+		required: true,
+		displayOptions: {
+			show: {
+				operation: [
+					'getDocument',
+					'deleteDocument',
+					'completeDocument',
+					'cancelDocument',
+					'getPdf',
+					'completeDocument',
+					'convertDocument',
+					'sendDocument',
+					'updateDocument',
+					'downloadJpeg',
+				],
+				resource: ['document'],
+			},
+		},
+	},
 	/* ╔═════════════════════╗ */
 	/* ║  GET DOCUMENT LIST  ║ */
 	/* ╚═════════════════════╝ */
@@ -52,7 +80,6 @@ export const documentFields: INodeProperties[] = [
 			},
 		},
 	},
-	// Zusätzliche Felder als Collection von Get
 	{
 		displayName: 'Additional Fields',
 		name: 'body',
@@ -199,242 +226,29 @@ export const documentFields: INodeProperties[] = [
 			},
 		},
 	},
-	/* ╔════════════════════════════════════════════╗ */
-	/* ║  DOCUMENT ID FÜR VERSCHIEDENE OPERATIONEN  ║ */
-	/* ╚════════════════════════════════════════════╝ */
-	{
-		displayName: 'Document ID',
-		name: 'document_id',
-		type: 'string',
-		default: '',
-		description: 'Die ID des Dokuments',
-		required: true,
-		displayOptions: {
-			show: {
-				operation: [
-					'getDocument',
-					'deleteDocument',
-					'completeDocument',
-					'cancelDocument',
-					'getPdf',
-					'completeDocument',
-					'convertDocument',
-					'sendDocument',
-					'updateDocument',
-					'downloadJpeg',
-				],
-				resource: ['document'],
-			},
-		},
-	},
-
-
-
 	/* ╔═══════════════════╗ */
-	/* ║  CANCEL DOCUMENT  ║ */
+	/* ║  CREATE DOCUMENT  ║ */
 	/* ╚═══════════════════╝ */
 	{
-		displayName: 'Use Text From Template',
-		name: 'use_text_from_template',
-		type: 'boolean',
-		default: false,
-		description: 'Whether to use standard texts from the template',
+		displayName: "Customer ID",
+		name: "customer_id",
+		type: "number",
+		default: 0,
+		description: 'The identifier for the customer',
 		displayOptions: {
 			show: {
-				operation: ['cancelDocument'],
-				resource: ['document'],
-			},
-		},
-	},
-
-
-	/* ╔═════════════════╗ */
-	/* ║  SEND DOCUMENT  ║ */
-	/* ╚═════════════════╝ */
-	{
-		"displayName": "Type",
-		"name": "type",
-		"type": "options",
-		"default": "email",
-		options: [
-			{
-				"name": "Email",
-				"value": "email"
-			},
-			{
-				"name": "Fax",
-				"value": "fax"
-			},
-			{
-				"name": "Post",
-				"value": "post"
-			}
-		],
-		required: true,
-		description: 'Available values : email, fax, post',
-		displayOptions: {
-			show: {
-				operation: ['sendDocument'],
-				resource: ['document'],
-			},
-		}
-	},
-	// Optionale Felder als Collection für Send
-	{
-		displayName: 'Additional Fields',
-		name: 'additionalFieldsSend',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		description: 'Additional Data for sending Doc',
-		options: [
-			{
-				"displayName": "CC",
-				"name": "cc",
-				"type": "string",
-				"default": "",
-				"description": ""
-			},
-			{
-				"displayName": "Date",
-				"name": "date",
-				"type": "dateTime",
-				"default": "",
-				"description": "($date)."
-			},
-			{
-				"displayName": "Document File Type",
-				"name": "document_file_type",
-				"type": "string",
-				"default": null,
-				"description": "When set to null, the setting on the customer is used. Enum: Array [ 7 ]"
-			},
-			{
-				"displayName": "From",
-				"name": "from",
-				"type": "string",
-				"default": "",
-				"description": ""
-			},
-			{
-				"displayName": "Message",
-				"name": "message",
-				"type": "string",
-				"default": "",
-				"description": ""
-			},
-			{
-				"displayName": "Post Send Type",
-				"name": "post_send_type",
-				"type": "options",
-				"default": "",
-				"description": "This value indicates what method is used when the document is send via mail. The different types are offered by the German post as additional services. The registered mail options will include a tracking number which will be added to the postbox when known. If omitted or empty for type \"POST\", post_send_type_standard will be used. For other types, this field will hold an empty string.",
-				options: [
-					{
-						name: 'Post_send_type_standard',
-						value: 'post_send_type_standard',
-					},
-					{
-						name: 'Post_send_type_registered',
-						value: 'post_send_type_registered',
-					},
-					{
-						name: 'Post_send_type_registered_and_personal',
-						value: 'post_send_type_registered_and_personal',
-					},
-					{
-						name: 'Post_send_type_registered_and_receipt',
-						value: 'post_send_type_registered_and_receipt',
-					},
-					{
-						name: 'Post_send_type_registered_throwin',
-						value: 'post_send_type_registered_throwin',
-					},
-				]
-			},
-			{
-				"displayName": "Send By Self",
-				"name": "send_by_self",
-				"type": "boolean",
-				"default": false,
-				"description": "Example: false"
-			},
-			{
-				"displayName": "Send With Attachment",
-				"name": "send_with_attachment",
-				"type": "boolean",
-				"default": true,
-				"description": "Example: true"
-			},
-			{
-				"displayName": "Subject",
-				"name": "subject",
-				"type": "string",
-				"default": "",
-				"description": ""
-			},
-			{
-				"displayName": "To",
-				"name": "to",
-				"type": "string",
-				"default": "",
-				"description": ""
-			}
-		]
-		,
-		displayOptions: {
-			show: {
-				operation: ['sendDocument'],
-				resource: ['document'],
-			},
-		},
-	},
-
-	/* ╔═════════════════════════╗ */
-	/* ║  CONVERT DOCUMENT TYPE  ║ */
-	/* ╚═════════════════════════╝ */
-	{
-		displayName: 'Type',
-		name: 'type',
-		type: 'string',
-		default: 'DUNNING',
-		required: true,
-		description: 'Available values : DUNNING, REMINDER, CHARGE_CONFIRM, CHARGE, CREDIT, DELIVERY, INVOICE, ORDER',
-		displayOptions: {
-			show: {
-				operation: ['convertDocument'],
-				resource: ['document'],
-			},
-		}
-	},
-	{
-		displayName: 'Additional Fields',
-		name: 'additionalFieldsDocs',
-		type: 'collection',
-		placeholder: 'Add PDF Template Choice',
-		default: {},
-		description: 'Add PDF Template',
-		options: [
-			{
-				displayName: 'PDF Template',
-				name: 'pdf_template',
-				type: 'string',
-				default: 'DE',
-				description: 'The ID of the printer template to use. Defaults to \'DE\' if not given.',
-			},
-
-		],
-		displayOptions: {
-			show: {
-				operation: ['convertDocument'],
-				resource: ['document'],
+				resource: [
+					'document',
+				],
+				operation: [
+					'createDocument',
+				],
 			},
 		},
 	},
 	/* ╔═══════════════════╗ */
 	/* ║  UPDATE DOCUMENT  ║ */
 	/* ╚═══════════════════╝ */
-
 	{
 		displayName: "Refresh Customer Data",
 		name: "refresh_customer_data",
@@ -469,26 +283,6 @@ export const documentFields: INodeProperties[] = [
 				operation: [
 					'updateDocument',
 					'completeDocument',
-				],
-			},
-		},
-	},
-	/* ╔═══════════════════╗ */
-	/* ║  CREATE DOCUMENT  ║ */
-	/* ╚═══════════════════╝ */
-	{
-		displayName: "Customer ID",
-		name: "customer_id",
-		type: "number",
-		default: 0,
-		description: 'The identifier for the customer',
-		displayOptions: {
-			show: {
-				resource: [
-					'document',
-				],
-				operation: [
-					'createDocument',
 				],
 			},
 		},
@@ -666,28 +460,6 @@ export const documentFields: INodeProperties[] = [
 			},
 		},
 	},
-
-	{
-		displayName: "Text",
-		name: "text",
-		type: "string",
-		default: "",
-		description: 'The text for the document',
-		displayOptions: {
-			show: {
-				resource: [
-					'document',
-				],
-				operation: [
-					'createDocument',
-					'updateDocument',
-				],
-			},
-		},
-	},
-	/* ╔════════════════════════════════════════════════╗ */
-	/* ║  ADDITIONAL FIELDS CREATE AND UPDATE DOCUMENT  ║ */
-	/* ╚════════════════════════════════════════════════╝ */
 	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
@@ -1165,9 +937,206 @@ export const documentFields: INodeProperties[] = [
 			},
 		},
 	},
-	/* ╔═════════════╗ */
-	/* ║  FETCH JPG  ║ */
-	/* ╚═════════════╝ */
+	/* ╔═══════════════════╗ */
+	/* ║  CANCEL DOCUMENT  ║ */
+	/* ╚═══════════════════╝ */
+	{
+		displayName: 'Use Text From Template',
+		name: 'use_text_from_template',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to use standard texts from the template',
+		displayOptions: {
+			show: {
+				operation: ['cancelDocument'],
+				resource: ['document'],
+			},
+		},
+	},
+	/* ╔═════════════════╗ */
+	/* ║  SEND DOCUMENT  ║ */
+	/* ╚═════════════════╝ */
+	{
+		"displayName": "Type",
+		"name": "type",
+		"type": "options",
+		"default": "email",
+		options: [
+			{
+				"name": "Email",
+				"value": "email"
+			},
+			{
+				"name": "Fax",
+				"value": "fax"
+			},
+			{
+				"name": "Post",
+				"value": "post"
+			}
+		],
+		required: true,
+		description: 'Available values : email, fax, post',
+		displayOptions: {
+			show: {
+				operation: ['sendDocument'],
+				resource: ['document'],
+			},
+		}
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFieldsSend',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		description: 'Additional Data for sending Doc',
+		options: [
+			{
+				"displayName": "CC",
+				"name": "cc",
+				"type": "string",
+				"default": "",
+				"description": ""
+			},
+			{
+				"displayName": "Date",
+				"name": "date",
+				"type": "dateTime",
+				"default": "",
+				"description": "($date)."
+			},
+			{
+				"displayName": "Document File Type",
+				"name": "document_file_type",
+				"type": "string",
+				"default": null,
+				"description": "When set to null, the setting on the customer is used. Enum: Array [ 7 ]"
+			},
+			{
+				"displayName": "From",
+				"name": "from",
+				"type": "string",
+				"default": "",
+				"description": ""
+			},
+			{
+				"displayName": "Message",
+				"name": "message",
+				"type": "string",
+				"default": "",
+				"description": ""
+			},
+			{
+				"displayName": "Post Send Type",
+				"name": "post_send_type",
+				"type": "options",
+				"default": "",
+				"description": "This value indicates what method is used when the document is send via mail. The different types are offered by the German post as additional services. The registered mail options will include a tracking number which will be added to the postbox when known. If omitted or empty for type \"POST\", post_send_type_standard will be used. For other types, this field will hold an empty string.",
+				options: [
+					{
+						name: 'Post_send_type_standard',
+						value: 'post_send_type_standard',
+					},
+					{
+						name: 'Post_send_type_registered',
+						value: 'post_send_type_registered',
+					},
+					{
+						name: 'Post_send_type_registered_and_personal',
+						value: 'post_send_type_registered_and_personal',
+					},
+					{
+						name: 'Post_send_type_registered_and_receipt',
+						value: 'post_send_type_registered_and_receipt',
+					},
+					{
+						name: 'Post_send_type_registered_throwin',
+						value: 'post_send_type_registered_throwin',
+					},
+				]
+			},
+			{
+				"displayName": "Send By Self",
+				"name": "send_by_self",
+				"type": "boolean",
+				"default": false,
+				"description": "Example: false"
+			},
+			{
+				"displayName": "Send With Attachment",
+				"name": "send_with_attachment",
+				"type": "boolean",
+				"default": true,
+				"description": "Example: true"
+			},
+			{
+				"displayName": "Subject",
+				"name": "subject",
+				"type": "string",
+				"default": "",
+				"description": ""
+			},
+			{
+				"displayName": "To",
+				"name": "to",
+				"type": "string",
+				"default": "",
+				"description": ""
+			}
+		]
+		,
+		displayOptions: {
+			show: {
+				operation: ['sendDocument'],
+				resource: ['document'],
+			},
+		},
+	},
+	/* ╔════════════════════╗ */
+	/* ║  CONVERT DOCUMENT  ║ */
+	/* ╚════════════════════╝ */
+	{
+		displayName: 'Type',
+		name: 'type',
+		type: 'string',
+		default: 'DUNNING',
+		required: true,
+		description: 'Available values : DUNNING, REMINDER, CHARGE_CONFIRM, CHARGE, CREDIT, DELIVERY, INVOICE, ORDER',
+		displayOptions: {
+			show: {
+				operation: ['convertDocument'],
+				resource: ['document'],
+			},
+		}
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFieldsDocs',
+		type: 'collection',
+		placeholder: 'Add PDF Template Choice',
+		default: {},
+		description: 'Add PDF Template',
+		options: [
+			{
+				displayName: 'PDF Template',
+				name: 'pdf_template',
+				type: 'string',
+				default: 'DE',
+				description: 'The ID of the printer template to use. Defaults to \'DE\' if not given.',
+			},
+
+		],
+		displayOptions: {
+			show: {
+				operation: ['convertDocument'],
+				resource: ['document'],
+			},
+		},
+	},
+	/* ╔══════════════════════════╗ */
+	/* ║  DOWNLOAD DOCUMENT JPEG  ║ */
+	/* ╚══════════════════════════╝ */
 	{
 		displayName: "Offset",
 		name: "offset",
@@ -1205,5 +1174,4 @@ export const documentFields: INodeProperties[] = [
 			},
 		},
 	},
-
-]
+];

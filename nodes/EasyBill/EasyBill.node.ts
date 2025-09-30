@@ -36,7 +36,7 @@ export class EasyBill implements INodeType {
         icon: 'file:easybill.png',
         group: ['transform'],
         version: 1,
-        subtitle: '={{$parameter["customerOperation"] + ": Customer"}}',
+        subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
         description: 'Kommuniziert mit der EasyBill API für Kunden',
         defaults: {
             name: 'EasyBill',
@@ -78,6 +78,16 @@ export class EasyBill implements INodeType {
                 ],
                 default: 'document',
             },
+
+            ...documentOperations,
+            ...documentFields,
+            ...customerOperations,
+            ...customerFields,
+            ...customerGroupOperations,
+            ...customerGroupFields,
+            ...discountOperations,
+            ...discountFields,
+
             {
                 displayName: 'Options',
                 name: 'options',
@@ -130,15 +140,6 @@ export class EasyBill implements INodeType {
                     },
                 ],
             },
-
-            ...documentOperations,
-            ...documentFields,
-            ...customerOperations,
-            ...customerFields,
-            ...customerGroupOperations,
-            ...customerGroupFields,
-            ...discountOperations,
-            ...discountFields,
         ],
     };
     // The execute method will go here
@@ -261,7 +262,6 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-
                 /* ╔═══════════════════╗ */
                 /* ║  UPDATE DOCUMENT  ║ */
                 /* ╚═══════════════════╝ */
@@ -432,7 +432,7 @@ export class EasyBill implements INodeType {
                     returnData.push(responseData);
                 }
                 /* ╔═════════════════════╗ */
-                /* ║  COMPLETE DOUCMENT  ║ */
+                /* ║  COMPLETE DOCUMENT  ║ */
                 /* ╚═════════════════════╝ */
                 if (operation === 'completeDocument') {
                     // Hole den Pflichtparameter document_id
@@ -523,9 +523,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔═════════════╗ */
-                /* ║  FETCH PDF  ║ */
-                /* ╚═════════════╝ */
+                /* ╔══════════════════════╗ */
+                /* ║  FETCH DOCUMENT PDF  ║ */
+                /* ╚══════════════════════╝ */
                 if (operation === 'getPdf') {
                     // Hole den Pflichtparameter document_id
                     const documentId = this.getNodeParameter('document_id', i) as number;
@@ -543,9 +543,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔═════════════╗ */
-                /* ║  FETCH JPG  ║ */
-                /* ╚═════════════╝ */
+                /* ╔══════════════════════════╗ */
+                /* ║  DOWNLOAD DOCUMENT JPEG  ║ */
+                /* ╚══════════════════════════╝ */
                 if (operation === 'downloadJpeg') {
                     // Hole den Pflichtparameter document_id
                     const documentId = this.getNodeParameter('document_id', i) as number;
@@ -577,9 +577,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔═════════════════════════╗ */
-                /* ║  CONVERT DOCUMENT TYPE  ║ */
-                /* ╚═════════════════════════╝ */
+                /* ╔════════════════════╗ */
+                /* ║  CONVERT DOCUMENT  ║ */
+                /* ╚════════════════════╝ */
                 if (operation === 'convertDocument') {
                     // Hole die Pflichtparameter document_id und type
                     const documentId = this.getNodeParameter('document_id', i) as number;
@@ -700,9 +700,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔══════════════════════╗ */
-                /* ║  GET CUSTOMERS LIST  ║ */
-                /* ╚══════════════════════╝ */
+                /* ╔═════════════════════╗ */
+                /* ║  GET CUSTOMER LIST  ║ */
+                /* ╚═════════════════════╝ */
                 if (operation === 'getCustomerList') {
                     // Hole optional additionalFields als Query-Parameter
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -767,15 +767,14 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-
             }
             /* -------------------------------------------------------------------------- */
             /*                              Customer Group                                */
             /* -------------------------------------------------------------------------- */
             if (resource === 'customerGroup') {
-                /* ╔══════════════════════════╗ */
-                /* ║  GET CUSTOMER GROUPS     ║ */
-                /* ╚══════════════════════════╝ */
+                /* ╔═══════════════════════════╗ */
+                /* ║  GET CUSTOMER GROUP LIST  ║ */
+                /* ╚═══════════════════════════╝ */
                 if (operation === 'getCustomerGroups') {
                     // Optionale zusätzliche Query-Parameter
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -796,9 +795,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔══════════════════════════╗ */
-                /* ║  CREATE CUSTOMER GROUP   ║ */
-                /* ╚══════════════════════════╝ */
+                /* ╔═════════════════════════╗ */
+                /* ║  CREATE CUSTOMER GROUP  ║ */
+                /* ╚═════════════════════════╝ */
                 if (operation === 'createCustomerGroup') {
                     // Hole die Pflichtparameter und optionale Felder
                     const name = this.getNodeParameter('name', i) as string;
@@ -824,9 +823,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔══════════════════════════╗ */
-                /* ║  GET CUSTOMER GROUP      ║ */
-                /* ╚══════════════════════════╝ */
+                /* ╔══════════════════════╗ */
+                /* ║  GET CUSTOMER GROUP  ║ */
+                /* ╚══════════════════════╝ */
                 if (operation === 'getCustomerGroup') {
                     const groupId = this.getNodeParameter('group_id', i) as number;
                     const options: OptionsWithUri = {
@@ -841,9 +840,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔══════════════════════════╗ */
-                /* ║  UPDATE CUSTOMER GROUP   ║ */
-                /* ╚══════════════════════════╝ */
+                /* ╔═════════════════════════╗ */
+                /* ║  UPDATE CUSTOMER GROUP  ║ */
+                /* ╚═════════════════════════╝ */
                 if (operation === 'updateCustomerGroup') {
                     const groupId = this.getNodeParameter('group_id', i) as number;
                     const name = this.getNodeParameter('name', i) as string | undefined;
@@ -874,9 +873,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔══════════════════════════╗ */
-                /* ║  DELETE CUSTOMER GROUP   ║ */
-                /* ╚══════════════════════════╝ */
+                /* ╔═════════════════════════╗ */
+                /* ║  DELETE CUSTOMER GROUP  ║ */
+                /* ╚═════════════════════════╝ */
                 if (operation === 'deleteCustomerGroup') {
                     const groupId = this.getNodeParameter('group_id', i) as number;
                     const options: OptionsWithUri = {
@@ -896,9 +895,9 @@ export class EasyBill implements INodeType {
             /*                                  Discount                                */
             /* -------------------------------------------------------------------------- */
             if (resource === 'discount') {
-                /* ╔════════════════════════════════════╗ */
-                /* ║  GET POSITION DISCOUNTS            ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔══════════════════════════════╗ */
+                /* ║  GET POSITION DISCOUNT LIST  ║ */
+                /* ╚══════════════════════════════╝ */
                 if (operation === 'getDiscountsPosition') {
                     // Optionale zusätzliche Query-Parameter
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -919,9 +918,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  CREATE POSITION DISCOUNT          ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔════════════════════════════╗ */
+                /* ║  CREATE POSITION DISCOUNT  ║ */
+                /* ╚════════════════════════════╝ */
                 if (operation === 'createDiscountPosition') {
                     // Pflichtparameter und optionale Felder
                     const position_id = this.getNodeParameter('position_id', i) as number;
@@ -951,9 +950,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  GET POSITION DISCOUNT             ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔═════════════════════════╗ */
+                /* ║  GET POSITION DISCOUNT  ║ */
+                /* ╚═════════════════════════╝ */
                 if (operation === 'getDiscountPosition') {
                     const discountId = this.getNodeParameter('discount_id', i) as number;
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -976,9 +975,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  UPDATE POSITION DISCOUNT          ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔════════════════════════════╗ */
+                /* ║  UPDATE POSITION DISCOUNT  ║ */
+                /* ╚════════════════════════════╝ */
                 if (operation === 'updateDiscountPosition') {
                     // Pflichtparameter und optionale Felder
                     const discountId = this.getNodeParameter('discount_id', i) as number;
@@ -1015,9 +1014,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  DELETE POSITION DISCOUNT          ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔════════════════════════════╗ */
+                /* ║  DELETE POSITION DISCOUNT  ║ */
+                /* ╚════════════════════════════╝ */
                 if (operation === 'deleteDiscountPosition') {
                     const discountId = this.getNodeParameter('discount_id', i) as number;
                     const options: OptionsWithUri = {
@@ -1032,13 +1031,8 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-
-                // ────────────────────────────────────────────────────────────────────────────────
-                // Operationen für Position-Group Rabatte
-                // ────────────────────────────────────────────────────────────────────────────────
-
                 /* ╔════════════════════════════════════╗ */
-                /* ║  GET POSITION GROUP DISCOUNTS      ║ */
+                /* ║  GET POSITION GROUP DISCOUNT LIST  ║ */
                 /* ╚════════════════════════════════════╝ */
                 if (operation === 'getDiscountsPositionGroup') {
                     // Optionale zusätzliche Query-Parameter
@@ -1060,9 +1054,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  CREATE POSITION GROUP DISCOUNT    ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔══════════════════════════════════╗ */
+                /* ║  CREATE POSITION GROUP DISCOUNT  ║ */
+                /* ╚══════════════════════════════════╝ */
                 if (operation === 'createDiscountPositionGroup') {
                     // Pflichtparameter und optionale Felder
                     const position_id = this.getNodeParameter('position_id', i) as number;
@@ -1092,9 +1086,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  GET POSITION GROUP DISCOUNT       ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔═══════════════════════════════╗ */
+                /* ║  GET POSITION GROUP DISCOUNT  ║ */
+                /* ╚═══════════════════════════════╝ */
                 if (operation === 'getDiscountPositionGroup') {
                     const discountId = this.getNodeParameter('discount_id', i) as number;
                     const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
@@ -1115,9 +1109,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  UPDATE POSITION GROUP DISCOUNT    ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔══════════════════════════════════╗ */
+                /* ║  UPDATE POSITION GROUP DISCOUNT  ║ */
+                /* ╚══════════════════════════════════╝ */
                 if (operation === 'updateDiscountPositionGroup') {
                     // Pflichtparameter und optionale Felder
                     const discountId = this.getNodeParameter('discount_id', i) as number;
@@ -1153,9 +1147,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  DELETE POSITION GROUP DISCOUNT    ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔══════════════════════════════════╗ */
+                /* ║  DELETE POSITION GROUP DISCOUNT  ║ */
+                /* ╚══════════════════════════════════╝ */
                 if (operation === 'deleteDiscountPositionGroup') {
                     const discountId = this.getNodeParameter('discount_id', i) as number;
                     const options: OptionsWithUri = {
@@ -1175,9 +1169,9 @@ export class EasyBill implements INodeType {
             /*                            Document Payment                              */
             /* -------------------------------------------------------------------------- */
             if (resource === 'documentPayment') {
-                /* ╔════════════════════════════════════╗ */
-                /* ║  GET DOCUMENT PAYMENTS LIST        ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔═════════════════════════════╗ */
+                /* ║  GET DOCUMENT PAYMENT LIST  ║ */
+                /* ╚═════════════════════════════╝ */
                 if (operation === 'getDocumentPayments') {
                     // Hole optionale Parameter: limit, page und weitere Query-Parameter
                     const limit = this.getNodeParameter('limit', i) as number | undefined;
@@ -1209,10 +1203,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-
-                /* ╔════════════════════════════════════╗ */
-                /* ║  CREATE DOCUMENT PAYMENT           ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔═══════════════════════════╗ */
+                /* ║  CREATE DOCUMENT PAYMENT  ║ */
+                /* ╚═══════════════════════════╝ */
                 if (operation === 'createDocumentPayment') {
                     // Retrieve required fields
                     const amount = this.getNodeParameter('amount', i) as number;
@@ -1252,9 +1245,9 @@ export class EasyBill implements INodeType {
                     responseData = await this.helpers.requestWithAuthentication.call(this, 'easyBillApi', options);
                     returnData.push(responseData);
                 }
-                /* ╔════════════════════════════════════╗ */
-                /* ║  GET DOCUMENT PAYMENT              ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔════════════════════════╗ */
+                /* ║  GET DOCUMENT PAYMENT  ║ */
+                /* ╚════════════════════════╝ */
                 if (operation === 'getDocumentPayment') {
                     // Hole den Pflichtparameter document_payment_id
                     const id = this.getNodeParameter('document_payment_id', i) as number;
@@ -1272,9 +1265,9 @@ export class EasyBill implements INodeType {
                     returnData.push(responseData);
                 }
 
-                /* ╔════════════════════════════════════╗ */
-                /* ║  DELETE DOCUMENT PAYMENT           ║ */
-                /* ╚════════════════════════════════════╝ */
+                /* ╔═══════════════════════════╗ */
+                /* ║  DELETE DOCUMENT PAYMENT  ║ */
+                /* ╚═══════════════════════════╝ */
                 if (operation === 'deleteDocumentPayment') {
                     // Hole den Pflichtparameter document_payment_id
                     const id = this.getNodeParameter('document_payment_id', i) as number;

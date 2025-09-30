@@ -2,9 +2,9 @@ import { INodeProperties } from 'n8n-workflow';
 
 export const customerGroupFields: INodeProperties[] = [
 
-	/* ╔══════════════════════════════════════════════════╗ */
-	/* ║  CUSTOMER GROUP ID FÜR VERSCHIEDENE OPERATIONEN  ║ */
-	/* ╚══════════════════════════════════════════════════╝ */
+	/* ╔═════════════════════╗ */
+	/* ║  CUSTOMER GROUP ID  ║ */
+	/* ╚═════════════════════╝ */
 	{
 		displayName: 'Customer Group ID',
 		name: 'group_id',
@@ -19,9 +19,9 @@ export const customerGroupFields: INodeProperties[] = [
 			},
 		},
 	},
-	/* ╔══════════════════════════╗ */
-	/* ║  GET CUSTOMER GROUPS     ║ */
-	/* ╚══════════════════════════╝ */
+	/* ╔═══════════════════════════╗ */
+	/* ║  GET CUSTOMER GROUP LIST  ║ */
+	/* ╚═══════════════════════════╝ */
 	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
@@ -141,4 +141,4 @@ export const customerGroupFields: INodeProperties[] = [
 			},
 		},
 	},
-]
+];

@@ -13,11 +13,11 @@ import { INodeProperties } from 'n8n-workflow';
  * Hinweis: Bei einer umfangreicheren Implementierung könnten diese Felder ebenfalls in eine eigene Datei (z. B. CustomerFields.ts) ausgelagert werden.
  */
 export const customerFields: INodeProperties[] = [
-    /* ╔════════════════════════════════════════════╗ */
-    /* ║  CUSTOMER ID FÜR VERSCHIEDENE OPERATIONEN  ║ */
-    /* ╚════════════════════════════════════════════╝ */
+    /* ╔═══════════════╗ */
+    /* ║  CUSTOMER ID  ║ */
+    /* ╚═══════════════╝ */
     {
-        displayName: 'Customer ID*',
+        displayName: 'Customer ID',
         name: 'customer_id',
         type: 'number',
         default: '',
@@ -30,7 +30,147 @@ export const customerFields: INodeProperties[] = [
             },
         },
     },
-
+    /* ╔═════════════════════╗ */
+    /* ║  GET CUSTOMER LIST  ║ */
+    /* ╚═════════════════════╝ */
+    {
+        displayName: 'Additional Fields',
+        name: 'additionalFields',
+        type: 'collection',
+        placeholder: 'Add Field',
+        default: {},
+        description: 'Additional params for Customers',
+        options: [
+            {
+                displayName: 'Additional Group ID',
+                name: 'additional_group_id',
+                type: 'string',
+                default: '',
+                // eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
+                description: 'Filter customers by additional_group_id. You can add multiple group ids separated by commas.',
+            },
+            {
+                displayName: 'Company Name',
+                name: 'company_name',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by company_name. You can add multiple names separated by commas like name,name,name.',
+            },
+            {
+                displayName: 'Country',
+                name: 'country',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by country. You can add multiple countries separated by commas like DE,PL,FR.',
+            },
+            {
+                displayName: 'Created At',
+                name: 'created_at',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by created_at. You can filter one date with created_at=2014-12-10 or between like 2015-01-01,2015-12-31.',
+            },
+            {
+                displayName: 'Emails',
+                name: 'emails',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by emails. You can add multiple emails separated by commas like mail,mail,mail.',
+            },
+            {
+                displayName: 'First Name',
+                name: 'first_name',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by first_name. You can add multiple names separated by commas like name,name,name.',
+            },
+            {
+                displayName: 'Group ID',
+                name: 'group_id',
+                type: 'string',
+                default: '',
+                // eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
+                description: 'Filter customers by group_id. You can add multiple group ids separated by commas like id,id,id.',
+            },
+            {
+                displayName: 'Last Name',
+                name: 'last_name',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by last_name. You can add multiple names separated by commas like name,name,name.',
+            },
+            {
+                displayName: 'Limit',
+                name: 'limit',
+                type: 'number',
+                default: 50,
+                description: 'Max number of results to return',
+                typeOptions: {
+                    minValue: 1
+                },
+            },
+            {
+                displayName: 'Number',
+                name: 'number',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by number. You can add multiple numbers separated by commas like no,no,no.',
+            },
+            {
+                displayName: 'Page',
+                name: 'page',
+                type: 'number',
+                default: 1,
+                description: 'Set current Page. Default is 1.',
+            },
+            {
+                displayName: 'Type',
+                name: 'type',
+                type: 'string',
+                default: '',
+                description: 'Controls the type of the customer. If "number" or "supplier_number" is empty, the type will force number generation if applicable. Available values: CUSTOMER, SUPPLIER, CUSTOMER,SUPPLIER. Default value: CUSTOMER.',
+            },
+            {
+                displayName: 'Zip Code',
+                name: 'zip_code',
+                type: 'string',
+                default: '',
+                description: 'Filter customers by zip_code. You can add multiple zip codes separated by commas like zip,zip,zip.',
+            },
+        ],
+        displayOptions: {
+            show: {
+                operation: ['getCustomerList'],
+                resource: ['customer'],
+            },
+        },
+    },
+    /* ╔══════════════════════════════╗ */
+    /* ║  CREATE AND UPDATE CUSTOMER  ║ */
+    /* ╚══════════════════════════════╝ */
+    {
+        displayName: 'Type',
+        name: 'type',
+        type: 'options',
+        default: 'CUSTOMER',
+        description: 'Controls the type of the customer. If provided and the field "number" or "supplier_number" is empty or omitted, the type will force the generation of the relevant number if applicable. I. e. omitting "supplier_number" but providing the query parameter "SUPPLIER" will generate a "supplier_number".',
+        options: [
+            {
+                name: 'CUSTOMER',
+                value: 'CUSTOMER',
+            },
+            {
+                name: 'SUPPLIER',
+                value: 'SUPPLIER',
+            },
+        ],
+        displayOptions: {
+            show: {
+                operation: ['createCustomer', 'updateCustomer'],
+                resource: ['customer'],
+            },
+        }
+    },
     /* ╔═══════════════════╗ */
     /* ║  CREATE CUSTOMER  ║ */
     /* ╚═══════════════════╝ */
@@ -410,32 +550,6 @@ export const customerFields: INodeProperties[] = [
             },
         },
     },
-    /* ╔══════════════════════════════╗ */
-    /* ║  CREATE AND UPDATE CUSTOMER  ║ */
-    /* ╚══════════════════════════════╝ */
-    {
-        displayName: 'Type',
-        name: 'type',
-        type: 'options',
-        default: 'CUSTOMER',
-        description: 'Controls the type of the customer. If provided and the field "number" or "supplier_number" is empty or omitted, the type will force the generation of the relevant number if applicable. I. e. omitting "supplier_number" but providing the query parameter "SUPPLIER" will generate a "supplier_number".',
-        options: [
-            {
-                name: 'CUSTOMER',
-                value: 'CUSTOMER',
-            },
-            {
-                name: 'SUPPLIER',
-                value: 'SUPPLIER',
-            },
-        ],
-        displayOptions: {
-            show: {
-                operation: ['createCustomer', 'updateCustomer'],
-                resource: ['customer'],
-            },
-        }
-    },
     /* ╔═══════════════════╗ */
     /* ║  UPDATE CUSTOMER  ║ */
     /* ╚═══════════════════╝ */
@@ -801,120 +915,4 @@ export const customerFields: INodeProperties[] = [
             },
         },
     },
-
-    /* ╔══════════════════════╗ */
-    /* ║  GET CUSTOMERS LIST  ║ */
-    /* ╚══════════════════════╝ */
-    {
-        displayName: 'Additional Fields',
-        name: 'additionalFields',
-        type: 'collection',
-        placeholder: 'Add Field',
-        default: {},
-        description: 'Additional params for Customers',
-        options: [
-            {
-                displayName: 'Additional Group ID',
-                name: 'additional_group_id',
-                type: 'string',
-                default: '',
-                // eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
-                description: 'Filter customers by additional_group_id. You can add multiple group ids separated by commas.',
-            },
-            {
-                displayName: 'Company Name',
-                name: 'company_name',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by company_name. You can add multiple names separated by commas like name,name,name.',
-            },
-            {
-                displayName: 'Country',
-                name: 'country',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by country. You can add multiple countries separated by commas like DE,PL,FR.',
-            },
-            {
-                displayName: 'Created At',
-                name: 'created_at',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by created_at. You can filter one date with created_at=2014-12-10 or between like 2015-01-01,2015-12-31.',
-            },
-            {
-                displayName: 'Emails',
-                name: 'emails',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by emails. You can add multiple emails separated by commas like mail,mail,mail.',
-            },
-            {
-                displayName: 'First Name',
-                name: 'first_name',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by first_name. You can add multiple names separated by commas like name,name,name.',
-            },
-            {
-                displayName: 'Group ID',
-                name: 'group_id',
-                type: 'string',
-                default: '',
-                // eslint-disable-next-line n8n-nodes-base/node-param-description-miscased-id
-                description: 'Filter customers by group_id. You can add multiple group ids separated by commas like id,id,id.',
-            },
-            {
-                displayName: 'Last Name',
-                name: 'last_name',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by last_name. You can add multiple names separated by commas like name,name,name.',
-            },
-            {
-                displayName: 'Limit',
-                name: 'limit',
-                type: 'number',
-                default: 50,
-                description: 'Max number of results to return',
-                typeOptions: {
-                    minValue: 1
-                },
-            },
-            {
-                displayName: 'Number',
-                name: 'number',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by number. You can add multiple numbers separated by commas like no,no,no.',
-            },
-            {
-                displayName: 'Page',
-                name: 'page',
-                type: 'number',
-                default: 1,
-                description: 'Set current Page. Default is 1.',
-            },
-            {
-                displayName: 'Type',
-                name: 'type',
-                type: 'string',
-                default: '',
-                description: 'Controls the type of the customer. If "number" or "supplier_number" is empty, the type will force number generation if applicable. Available values: CUSTOMER, SUPPLIER, CUSTOMER,SUPPLIER. Default value: CUSTOMER.',
-            },
-            {
-                displayName: 'Zip Code',
-                name: 'zip_code',
-                type: 'string',
-                default: '',
-                description: 'Filter customers by zip_code. You can add multiple zip codes separated by commas like zip,zip,zip.',
-            },
-        ],
-        displayOptions: {
-            show: {
-                operation: ['getCustomerList'],
-                resource: ['customer'],
-            },
-        },
-    }
-]
+];
