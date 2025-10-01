@@ -43,19 +43,19 @@ export const discountOperations: INodeProperties[] = [
 				description: 'Ruft einen spezifischen Positionsrabatt ab',
 			},
 			{
-				name: 'Get Position Discounts',
-				value: 'getDiscountsPosition',
-				action: 'Fetch list of position discounts',
-				description: 'Ruft die Liste der Positionsrabatte ab',
-			},
-			{
 				name: 'Get Position Group Discount',
 				value: 'getDiscountPositionGroup',
 				action: 'Fetch position group discount',
 				description: 'Ruft einen spezifischen Positionsgruppenrabatt ab',
 			},
 			{
-				name: 'Get Position Group Discounts',
+				name: 'Get Position Discount List',
+				value: 'getDiscountsPosition',
+				action: 'Fetch list of position discounts',
+				description: 'Ruft die Liste der Positionsrabatte ab',
+			},
+			{
+				name: 'Get Position Group Discount List',
 				value: 'getDiscountsPositionGroup',
 				action: 'Fetch list of position group discounts',
 				description: 'Ruft die Liste der Positionsgruppenrabatte ab',

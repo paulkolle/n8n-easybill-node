@@ -1,9 +1,26 @@
 import { INodeProperties } from 'n8n-workflow';
 
 export const documentPaymentFields: INodeProperties[] = [
-    /* ╔════════════════════════════════════╗ */
-    /* ║  GET DOCUMENT PAYMENTS             ║ */
-    /* ╚════════════════════════════════════╝ */
+    /* ╔═══════════════════════╗ */
+    /* ║  DOCUMENT PAYMENT ID  ║ */
+    /* ╚═══════════════════════╝ */
+    {
+        displayName: 'Document Payment ID',
+        name: 'document_payment_id',
+        type: 'string',
+        default: '',
+        description: 'Die ID des Document Payment',
+        required: true,
+        displayOptions: {
+            show: {
+                resource: ['documentPayment'],
+                operation: ['getDocumentPayment', 'deleteDocumentPayment'],
+            },
+        },
+    },
+    /* ╔═════════════════════════════╗ */
+    /* ║  GET DOCUMENT PAYMENT LIST  ║ */
+    /* ╚═════════════════════════════╝ */
     {
         displayName: 'Limit',
         name: 'limit',
@@ -70,11 +87,9 @@ export const documentPaymentFields: INodeProperties[] = [
             },
         },
     },
-
-    /* ╔════════════════════════════════════╗ */
-    /* ║  CREATE DOCUMENT PAYMENT           ║ */
-    /* ╚════════════════════════════════════╝ */
-
+    /* ╔═══════════════════════════╗ */
+    /* ║  CREATE DOCUMENT PAYMENT  ║ */
+    /* ╚═══════════════════════════╝ */
     {
         displayName: 'Amount',
         name: 'amount',
@@ -172,41 +187,5 @@ export const documentPaymentFields: INodeProperties[] = [
                 description: 'The type of payment'
             }
         ]
-    },
-
-    /* ╔════════════════════════════════════╗ */
-    /* ║  GET DOCUMENT PAYMENT              ║ */
-    /* ╚════════════════════════════════════╝ */
-    {
-        displayName: 'Document Payment ID',
-        name: 'document_payment_id',
-        type: 'string',
-        default: '',
-        description: 'Die ID des Document Payment',
-        required: true,
-        displayOptions: {
-            show: {
-                resource: ['documentPayment'],
-                operation: ['getDocumentPayment'],
-            },
-        },
-    },
-
-    /* ╔════════════════════════════════════╗ */
-    /* ║  DELETE DOCUMENT PAYMENT           ║ */
-    /* ╚════════════════════════════════════╝ */
-    {
-        displayName: 'Document Payment ID',
-        name: 'document_payment_id',
-        type: 'string',
-        default: '',
-        description: 'Die ID des Document Payment',
-        required: true,
-        displayOptions: {
-            show: {
-                resource: ['documentPayment'],
-                operation: ['deleteDocumentPayment'],
-            },
-        },
     },
 ];

@@ -81,7 +81,7 @@ export const customerOperations: INodeProperties[] = [
         },
         options: [
             {
-                name: 'Create',
+                name: 'Create Customer',
                 value: 'createCustomer',
                 action: 'Create customer',
                 description: 'Creates a new customer',
@@ -99,7 +99,7 @@ export const customerOperations: INodeProperties[] = [
                 description: 'Retrieves a customer',
             },
             {
-                name: 'Get List',
+                name: 'Get Customer List',
                 value: 'getCustomerList',
                 action: 'Fetch customers list',
                 description: 'Fetches the list of customers',

@@ -31,7 +31,7 @@ export const documentPaymentOperations: INodeProperties[] = [
 				description: 'Fetches a specific Document Payment',
 			},
 			{
-				name: 'Get Document Payments',
+				name: 'Get Document Payment List',
 				value: 'getDocumentPayments',
 				action: 'Fetch document payments list',
 				description: 'Fetches the list of Document Payments',

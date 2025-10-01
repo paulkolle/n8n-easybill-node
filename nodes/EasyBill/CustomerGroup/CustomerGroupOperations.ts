@@ -31,7 +31,7 @@ export const customerGroupOperations: INodeProperties[] = [
                 description: 'Ruft eine einzelne Customer Group ab',
             },
             {
-                name: 'Get Customer Groups',
+                name: 'Get Customer Group List',
                 value: 'getCustomerGroups',
                 action: 'Fetch customer group list',
                 description: 'Ruft die Liste der Customer Groups ab',
