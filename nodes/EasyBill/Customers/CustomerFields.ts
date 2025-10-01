@@ -21,7 +21,6 @@ export const customerFields: INodeProperties[] = [
         name: 'customer_id',
         type: 'number',
         default: '',
-        description: 'Customer ID',
         required: true, // Pflichtfeld
         displayOptions: {
             show: {

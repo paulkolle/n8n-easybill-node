@@ -14,36 +14,6 @@ export const documentOperations: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Create Document',
-				value: 'createDocument',
-				action: 'Create document',
-				description: 'Legt ein neues Dokument an',
-			},
-			{
-				name: 'Delete Document',
-				value: 'deleteDocument',
-				action: 'Delete document',
-				description: 'Löscht ein Dokument',
-			},
-			{
-				name: 'Get Document',
-				value: 'getDocument',
-				action: 'Fetch document',
-				description: 'Ruft ein einzelnes Dokument ab',
-			},
-			{
-				name: 'Get Document List',
-				value: 'getDocList',
-				action: 'Fetch documents list',
-				description: 'Ruft die Liste der Dokumente ab',
-			},
-			{
-				name: 'Update Document',
-				value: 'updateDocument',
-				action: 'Update document',
-				description: 'Aktualisiert ein Dokument',
-			},
-			{
 				name: 'Cancel Document',
 				value: 'cancelDocument',
 				action: 'Cancel document',
@@ -62,6 +32,18 @@ export const documentOperations: INodeProperties[] = [
 				description: 'Konvertiert ein Dokument in einen anderen Typ',
 			},
 			{
+				name: 'Create Document',
+				value: 'createDocument',
+				action: 'Create document',
+				description: 'Legt ein neues Dokument an',
+			},
+			{
+				name: 'Delete Document',
+				value: 'deleteDocument',
+				action: 'Delete document',
+				description: 'Löscht ein Dokument',
+			},
+			{
 				name: 'Download Document As JPEG',
 				value: 'downloadJpeg',
 				action: 'Download document as JPEG',
@@ -74,12 +56,31 @@ export const documentOperations: INodeProperties[] = [
 				description: 'Ruft das PDF des Dokuments ab',
 			},
 			{
+				name: 'Get Document',
+				value: 'getDocument',
+				action: 'Fetch document',
+				description: 'Ruft ein einzelnes Dokument ab',
+			},
+			{
+				name: 'Get Document List',
+				value: 'getDocList',
+				action: 'Fetch documents list',
+				description: 'Ruft die Liste der Dokumente ab',
+			},
+			{
 				name: 'Send Document',
 				value: 'sendDocument',
 				action: 'Send document',
 				description: 'Sendet ein Dokument',
 			},
+			{
+				name: 'Update Document',
+				value: 'updateDocument',
+				action: 'Update document',
+				description: 'Aktualisiert ein Dokument',
+			},
 		],
+
 		default: 'getDocList',
 	},
 ]
