@@ -1,5 +1,6 @@
-import {
+import type {
 	IAuthenticateGeneric,
+	Icon,
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
@@ -8,16 +9,19 @@ import {
 export class EasyBillApi implements ICredentialType {
 	name = 'easyBillApi';
 	displayName = 'EasyBill API';
+	// eslint-disable-next-line @n8n/community-nodes/icon-validation
+	icon: Icon = 'file:../icons/easybill.png';
 	// Uses the link to this tutorial as an example
 	// Replace with your own docs links when building your own nodes
-	documentationUrl = 'https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/';
+	documentationUrl =
+		'https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',
 			name: 'apiKey',
 			type: 'string',
 			default: '',
-            typeOptions: {
+			typeOptions: {
 				password: true, // Versteckt den API Key in der UI
 			},
 		},
@@ -30,7 +34,7 @@ export class EasyBillApi implements ICredentialType {
 			},
 		},
 	};
-    test: ICredentialTestRequest = {
+	test: ICredentialTestRequest = {
 		request: {
 			baseURL: 'https://api.easybill.de/rest/v1', // API-Base-URL
 			url: '/customers', // Endpoint zum Testen der Credentials

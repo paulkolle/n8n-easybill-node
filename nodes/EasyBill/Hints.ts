@@ -1,4 +1,4 @@
-import { NodeHint } from "n8n-workflow"
+import { NodeHint } from 'n8n-workflow';
 
 // description: INodeTypeDescription = {
 // 	...
@@ -20,12 +20,12 @@ import { NodeHint } from "n8n-workflow"
 // 	...
 // }
 
-export const hints:NodeHint[] =  [
-    // {
-    //     // Hinweistext mit HTML-Unterstützung
-    //     message: "Currently, only one item can be sent per request. If you need to add multiple items to an invoice, consider using the <b>HTTP Request</b> node.",
-    //     type: "warning",
-    //     whenToDisplay: "always",
-    //     displayCondition: '={{ $parameter["operation"] === "createDoc" || $parameter["operation"] === "updateDocument" }}'
-    // }
-]
+export const hints: NodeHint[] = [
+	// {
+	//     // Hinweistext mit HTML-Unterstützung
+	//     message: "Currently, only one item can be sent per request. If you need to add multiple items to an invoice, consider using the <b>HTTP Request</b> node.",
+	//     type: "warning",
+	//     whenToDisplay: "always",
+	//     displayCondition: '={{ $parameter["operation"] === "createDoc" || $parameter["operation"] === "updateDocument" }}'
+	// }
+];

@@ -1,7 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 
 export const customerGroupFields: INodeProperties[] = [
-
 	/* ╔═════════════════════╗ */
 	/* ║  CUSTOMER GROUP ID  ║ */
 	/* ╚═════════════════════╝ */
@@ -15,7 +14,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['getCustomerGroup', 'updateCustomerGroup', 'deleteCustomerGroup',],
+				operation: ['getCustomerGroup', 'updateCustomerGroup', 'deleteCustomerGroup'],
 			},
 		},
 	},
@@ -68,7 +67,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['createCustomerGroup',],
+				operation: ['createCustomerGroup'],
 			},
 		},
 	},
@@ -82,7 +81,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['createCustomerGroup',],
+				operation: ['createCustomerGroup'],
 			},
 		},
 	},
@@ -95,7 +94,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['createCustomerGroup',],
+				operation: ['createCustomerGroup'],
 			},
 		},
 	},
@@ -111,7 +110,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup',],
+				operation: ['updateCustomerGroup'],
 			},
 		},
 	},
@@ -124,7 +123,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup',],
+				operation: ['updateCustomerGroup'],
 			},
 		},
 	},
@@ -137,7 +136,7 @@ export const customerGroupFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['customerGroup'],
-				operation: ['updateCustomerGroup',],
+				operation: ['updateCustomerGroup'],
 			},
 		},
 	},

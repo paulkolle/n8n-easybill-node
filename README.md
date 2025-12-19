@@ -1,4 +1,4 @@
-![Repo Image](easybill.png)
+![Repo Image](icons/easybill.png)
 
 # n8n-nodes-easybill
 
@@ -14,7 +14,7 @@ Easybill is a service for managing invoices and billing. This node is a work in 
 [Compatibility](#compatibility)  
 [Usage](#usage)  
 [Resources](#resources)  
-[Version history](#version-history)  
+[Version history](#version-history)
 
 ## Installation
 
@@ -34,21 +34,22 @@ _Tested with n8n versions X and above. There might be issues with older versions
 
 ## Usage
 
-This section is pretty bare-bones for now.  
+This section is pretty bare-bones for now.
+
 - Add the node in your workflow.
 - Configure your Easybill credentials.
-- Use it to create or update invoices.  
+- Use it to create or update invoices.
 
 For now, consider this a quick and dirty solution until I polish everything up.
 
 ## Resources
 
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
-* [Easybill API Documentation](https://www.easybill.de/) (link may be updated later)
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
+- [Easybill API Documentation](https://www.easybill.de/) (link may be updated later)
 
 ## Version history
 
-* **0.1.0** – Initial rough version. Not all features are implemented.
-* **Upcoming versions** – More features, better documentation, and bug fixes as development continues.
+- **0.1.0** – Initial rough version. Not all features are implemented.
+- **Upcoming versions** – More features, better documentation, and bug fixes as development continues.
 
-*P.S.: This is still a work in progress. Detailed instructions and complete features are coming soon – stay tuned!*
+_P.S.: This is still a work in progress. Detailed instructions and complete features are coming soon – stay tuned!_
