@@ -16,7 +16,7 @@ import { customerGroupOperations } from './CustomerGroup/CustomerGroupOperations
 import { customerGroupFields } from './CustomerGroup/CustomerGroupFields';
 import { discountOperations } from './Discount/DiscountOperations';
 import { discountFields } from './Discount/DiscountFields';
-
+import { easyBillApiRequest } from './GenericFunctions';
 /**
  * HAUPTEINSTIEG: EasyBill Node
  *
@@ -137,10 +137,8 @@ export class EasyBill implements INodeType {
 			},
 		],
 	};
-	// The execute method will go here
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		const baseUrl = 'https://api.easybill.de/rest/v1';
 		// const baseUrl = 'https://webhook.site/7a3a6e3b-d001-4686-8f80-7c7fac939015'
 		// Eingabedaten aus vorherigen Nodes
 		const items = this.getInputData();
@@ -247,15 +245,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'POST',
 						body: data,
-						url: `${baseUrl}/documents`,
+						url: '/documents',
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════╗ */
@@ -341,16 +335,12 @@ export class EasyBill implements INodeType {
 						},
 						method: 'PUT',
 						body: data,
-						url: `${baseUrl}/documents/${documentId}`,
+						url: `/documents/${documentId}`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════╗ */
@@ -381,16 +371,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/documents`,
+						url: `/documents`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════╗ */
@@ -406,15 +392,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/documents/${documentId}`,
+						url: `/documents/${documentId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════╗ */
@@ -430,15 +412,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'DELETE',
-						url: `${baseUrl}/documents/${documentId}`,
+						url: `/documents/${documentId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════╗ */
@@ -464,16 +442,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'PUT',
-						url: `${baseUrl}/documents/${documentId}/done`,
+						url: `/documents/${documentId}/done`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════╗ */
@@ -499,16 +473,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'POST',
-						url: `${baseUrl}/documents/${documentId}/cancel`,
+						url: `/documents/${documentId}/cancel`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════╗ */
@@ -537,16 +507,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'POST',
-						url: `${baseUrl}/documents/${documentId}/send/${type}`,
+						url: `/documents/${documentId}/send/${type}`,
 						json: true,
 						body,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔══════════════════════╗ */
@@ -562,15 +528,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/documents/${documentId}/pdf`,
+						url: `/documents/${documentId}/pdf`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔══════════════════════════╗ */
@@ -598,16 +560,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/documents/${documentId}/jpg`,
+						url: `/documents/${documentId}/jpg`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════════╗ */
@@ -640,16 +598,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'POST',
-						url: `${baseUrl}/documents/${documentId}/${type}`,
+						url: `/documents/${documentId}/${type}`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 			}
@@ -691,17 +645,13 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'POST',
-						url: `${baseUrl}/customers`,
+						url: `/customers`,
 						json: true,
 						qs,
 						body: data,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════╗ */
@@ -717,15 +667,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'DELETE',
-						url: `${baseUrl}/customers/${customerId}`,
+						url: `/customers/${customerId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════╗ */
@@ -741,15 +687,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/customers/${customerId}`,
+						url: `/customers/${customerId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════╗ */
@@ -772,16 +714,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/customers`,
+						url: `/customers`,
 						qs,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════╗ */
@@ -815,17 +753,13 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'PUT',
-						url: `${baseUrl}/customers/${customerId}`,
+						url: `/customers/${customerId}`,
 						qs,
 						json: true,
 						body: data,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 			}
@@ -851,16 +785,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/customer-groups`,
+						url: `/customer-groups`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════════╗ */
@@ -884,15 +814,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'POST',
 						body: data,
-						url: `${baseUrl}/customer-groups`,
+						url: `/customer-groups`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔══════════════════════╗ */
@@ -906,15 +832,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/customer-groups/${groupId}`,
+						url: `/customer-groups/${groupId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════════╗ */
@@ -944,15 +866,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'PUT',
 						body: data,
-						url: `${baseUrl}/customer-groups/${groupId}`,
+						url: `/customer-groups/${groupId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════════╗ */
@@ -966,15 +884,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'DELETE',
-						url: `${baseUrl}/customer-groups/${groupId}`,
+						url: `/customer-groups/${groupId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 			}
@@ -1000,16 +914,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/discounts/position`,
+						url: `/discounts/position`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════════════════╗ */
@@ -1037,15 +947,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'POST',
 						body: data,
-						url: `${baseUrl}/discounts/position`,
+						url: `/discounts/position`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═════════════════════════╗ */
@@ -1066,16 +972,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/discounts/position/${discountId}`,
+						url: `/discounts/position/${discountId}`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════════════════╗ */
@@ -1110,15 +1012,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'PUT',
 						body: data,
-						url: `${baseUrl}/discounts/position/${discountId}`,
+						url: `/discounts/position/${discountId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════════════════╗ */
@@ -1132,15 +1030,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'DELETE',
-						url: `${baseUrl}/discounts/position/${discountId}`,
+						url: `/discounts/position/${discountId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════════════════════════╗ */
@@ -1158,16 +1052,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/discounts/position-group`,
+						url: `/discounts/position-group`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔══════════════════════════════════╗ */
@@ -1195,15 +1085,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'POST',
 						body: data,
-						url: `${baseUrl}/discounts/position-group`,
+						url: `/discounts/position-group`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════════════════╗ */
@@ -1224,15 +1110,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/discounts/position-group/${discountId}`,
+						url: `/discounts/position-group/${discountId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔══════════════════════════════════╗ */
@@ -1267,15 +1149,11 @@ export class EasyBill implements INodeType {
 						},
 						method: 'PUT',
 						body: data,
-						url: `${baseUrl}/discounts/position-group/${discountId}`,
+						url: `/discounts/position-group/${discountId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔══════════════════════════════════╗ */
@@ -1289,15 +1167,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'DELETE',
-						url: `${baseUrl}/discounts/position-group/${discountId}`,
+						url: `/discounts/position-group/${discountId}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 			}
@@ -1330,16 +1204,12 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/document-payments`,
+						url: `/document-payments`,
 						json: true,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔═══════════════════════════╗ */
@@ -1374,17 +1244,13 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'POST',
-						url: `${baseUrl}/document-payments`,
+						url: `/document-payments`,
 						json: true,
 						body,
 						qs,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 				/* ╔════════════════════════╗ */
@@ -1399,15 +1265,11 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'GET',
-						url: `${baseUrl}/document-payments/${id}`,
+						url: `/document-payments/${id}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 
@@ -1423,20 +1285,17 @@ export class EasyBill implements INodeType {
 							Accept: 'application/json',
 						},
 						method: 'DELETE',
-						url: `${baseUrl}/document-payments/${id}`,
+						url: `/document-payments/${id}`,
 						json: true,
 					};
 
-					responseData = await this.helpers.httpRequestWithAuthentication.call(
-						this,
-						'easyBillApi',
-						options,
-					);
+					responseData = await easyBillApiRequest.call(this, options);
 					returnData.push(responseData);
 				}
 			}
 		}
 		// Rückgabe des Ergebnisses im n8n-Format
-		return [this.helpers.returnJsonArray(returnData)];
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return [this.helpers.returnJsonArray(returnData as any[])];
 	}
 }
