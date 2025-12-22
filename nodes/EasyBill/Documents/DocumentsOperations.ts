@@ -1,5 +1,4 @@
-import { INodeProperties } from 'n8n-workflow'
-
+import { INodeProperties } from 'n8n-workflow';
 
 export const documentOperations: INodeProperties[] = [
 	{
@@ -83,5 +82,4 @@ export const documentOperations: INodeProperties[] = [
 
 		default: 'getDocList',
 	},
-]
-
+];
