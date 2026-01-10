@@ -16,6 +16,8 @@ import { customerGroupOperations } from './CustomerGroup/CustomerGroupOperations
 import { customerGroupFields } from './CustomerGroup/CustomerGroupFields';
 import { discountOperations } from './Discount/DiscountOperations';
 import { discountFields } from './Discount/DiscountFields';
+import { sepaPaymentOperations } from './SEPAPayment/SEPAPaymentOperations';
+import { sepaPaymentFields } from './SEPAPayment/SEPAPaymentFields';
 import { easyBillApiRequest } from './GenericFunctions';
 /**
  * HAUPTEINSTIEG: EasyBill Node
@@ -65,9 +67,10 @@ export class EasyBill implements INodeType {
 				noDataExpression: true,
 				options: [
 					{ name: 'Customer', value: 'customer' },
-					{ name: 'Document', value: 'document' },
 					{ name: 'Customer Group', value: 'customerGroup' },
 					{ name: 'Discount', value: 'discount' },
+					{ name: 'Document', value: 'document' },
+					{ name: 'SEPA Payment', value: 'sepaPayment' },
 
 					// Weitere Ressourcen können hier ergänzt werden.
 				],
@@ -82,6 +85,8 @@ export class EasyBill implements INodeType {
 			...customerGroupFields,
 			...discountOperations,
 			...discountFields,
+			...sepaPaymentOperations,
+			...sepaPaymentFields,
 
 			{
 				displayName: 'Options',
@@ -1286,6 +1291,228 @@ export class EasyBill implements INodeType {
 						},
 						method: 'DELETE',
 						url: `/document-payments/${id}`,
+						json: true,
+					};
+
+					responseData = await easyBillApiRequest.call(this, options);
+					returnData.push(responseData);
+				}
+			}
+			/* -------------------------------------------------------------------------- */
+			/*                              SEPA Payment                                */
+			/* -------------------------------------------------------------------------- */
+			if (resource === 'sepaPayment') {
+				const toDateString = (value?: string) => (value ? value.split('T')[0] : undefined);
+				const mapSepaAdditionalFields = (fields: IDataObject) => {
+					const payload: IDataObject = {};
+					const mapping: Record<string, string> = {
+						creditorBic: 'creditor_bic',
+						creditorIban: 'creditor_iban',
+						creditorName: 'creditor_name',
+						debitorBic: 'debitor_bic',
+						debitorAddressLine1: 'debitor_address_line_1',
+						debitorAddressLine2: 'debitor_address_line2',
+						debitorCountry: 'debitor_country',
+						remittanceInformation: 'remittance_information',
+						type: 'type',
+					};
+
+					for (const [key, value] of Object.entries(fields)) {
+						if (value === '' || value === undefined || value === null) {
+							continue;
+						}
+
+						if (key === 'exportAt') {
+							payload.export_at = value;
+							continue;
+						}
+
+						if (key === 'requestedAt') {
+							const dateValue = toDateString(value as string);
+							if (dateValue) {
+								payload.requested_at = dateValue;
+							}
+							continue;
+						}
+
+						const mappedKey = mapping[key];
+						if (mappedKey) {
+							payload[mappedKey] = value;
+						}
+					}
+
+					return payload;
+				};
+
+				/* ╔══════════════════════════╗ */
+				/* ║  GET SEPA PAYMENTS LIST  ║ */
+				/* ╚══════════════════════════╝ */
+				if (operation === 'getSepaPayments') {
+					const limit = this.getNodeParameter('limit', i) as number | undefined;
+					const page = this.getNodeParameter('page', i) as number | undefined;
+					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					const qs: IDataObject = {};
+
+					if (limit !== undefined) {
+						qs.limit = limit;
+					}
+					if (page !== undefined) {
+						qs.page = page;
+					}
+					if (additionalFields && Object.keys(additionalFields).length > 0) {
+						Object.assign(qs, additionalFields);
+					}
+
+					const options: IHttpRequestOptions = {
+						headers: {
+							Accept: 'application/json',
+						},
+						method: 'GET',
+						url: `/sepa-payments`,
+						json: true,
+						qs,
+					};
+
+					responseData = await easyBillApiRequest.call(this, options);
+					returnData.push(responseData);
+				}
+				/* ╔════════════════════════╗ */
+				/* ║  CREATE SEPA PAYMENT   ║ */
+				/* ╚════════════════════════╝ */
+				if (operation === 'createSepaPayment') {
+					const documentId = this.getNodeParameter('documentId', i) as number;
+					const debitorName = this.getNodeParameter('debitorName', i) as string;
+					const debitorIban = this.getNodeParameter('debitorIban', i) as string;
+					const mandateId = this.getNodeParameter('mandateId', i) as string;
+					const mandateDateOfSignature = this.getNodeParameter(
+						'mandateDateOfSignature',
+						i,
+					) as string;
+					const localInstrument = this.getNodeParameter('localInstrument', i) as string;
+					const sequenceType = this.getNodeParameter('sequenceType', i) as string;
+					const amount = this.getNodeParameter('amount', i) as number;
+					const reference = this.getNodeParameter('reference', i) as string;
+					const requestedAt = this.getNodeParameter('requestedAt', i) as string;
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+					const mandateDate = toDateString(mandateDateOfSignature) ?? mandateDateOfSignature;
+					const requestedDate = toDateString(requestedAt) ?? requestedAt;
+
+					const body: IDataObject = {
+						document_id: documentId,
+						debitor_name: debitorName,
+						debitor_iban: debitorIban,
+						mandate_id: mandateId,
+						mandate_date_of_signature: mandateDate,
+						local_instrument: localInstrument,
+						sequence_type: sequenceType,
+						amount,
+						reference,
+						requested_at: requestedDate,
+					};
+
+					Object.assign(body, mapSepaAdditionalFields(additionalFields));
+
+					const options: IHttpRequestOptions = {
+						headers: {
+							Accept: 'application/json',
+						},
+						method: 'POST',
+						url: `/sepa-payments`,
+						json: true,
+						body,
+					};
+
+					responseData = await easyBillApiRequest.call(this, options);
+					returnData.push(responseData);
+				}
+				/* ╔═══════════════════════╗ */
+				/* ║  GET SEPA PAYMENT     ║ */
+				/* ╚═══════════════════════╝ */
+				if (operation === 'getSepaPayment') {
+					const id = this.getNodeParameter('sepaPaymentId', i) as number;
+
+					const options: IHttpRequestOptions = {
+						headers: {
+							Accept: 'application/json',
+						},
+						method: 'GET',
+						url: `/sepa-payments/${id}`,
+						json: true,
+					};
+
+					responseData = await easyBillApiRequest.call(this, options);
+					returnData.push(responseData);
+				}
+				/* ╔════════════════════════╗ */
+				/* ║  UPDATE SEPA PAYMENT   ║ */
+				/* ╚════════════════════════╝ */
+				if (operation === 'updateSepaPayment') {
+					const id = this.getNodeParameter('sepaPaymentId', i) as number;
+					const documentId = this.getNodeParameter('documentId', i) as number;
+					const requestedAt = this.getNodeParameter('requestedAt', i) as string;
+					const updateFields = this.getNodeParameter('updateFields', i, {}) as IDataObject;
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+					const requestedDate = toDateString(requestedAt) ?? requestedAt;
+
+					const body: IDataObject = {
+						document_id: documentId,
+						requested_at: requestedDate,
+					};
+
+					const addFieldIfProvided = (
+						fieldName: string,
+						targetName: string,
+						transform?: (value: unknown) => unknown,
+					) => {
+						if (!Object.prototype.hasOwnProperty.call(updateFields, fieldName)) {
+							return;
+						}
+						const value = updateFields[fieldName];
+						if (value === undefined || value === null || value === '' || value === '__KEEP__') {
+							return;
+						}
+						body[targetName] = transform ? transform(value) : value;
+					};
+
+					addFieldIfProvided('debitorName', 'debitor_name');
+					addFieldIfProvided('debitorIban', 'debitor_iban');
+					addFieldIfProvided('mandateId', 'mandate_id');
+					addFieldIfProvided('mandateDateOfSignature', 'mandate_date_of_signature', (value) => {
+						const dateValue = toDateString(value as string);
+						return dateValue ?? value;
+					});
+					addFieldIfProvided('localInstrument', 'local_instrument');
+					addFieldIfProvided('sequenceType', 'sequence_type');
+					addFieldIfProvided('amount', 'amount');
+					addFieldIfProvided('reference', 'reference');
+
+					Object.assign(body, mapSepaAdditionalFields(additionalFields));
+
+					const options: IHttpRequestOptions = {
+						headers: {
+							Accept: 'application/json',
+						},
+						method: 'PUT',
+						url: `/sepa-payments/${id}`,
+						json: true,
+						body,
+					};
+
+					responseData = await easyBillApiRequest.call(this, options);
+					returnData.push(responseData);
+				}
+				/* ╔════════════════════════╗ */
+				/* ║  DELETE SEPA PAYMENT   ║ */
+				/* ╚════════════════════════╝ */
+				if (operation === 'deleteSepaPayment') {
+					const id = this.getNodeParameter('sepaPaymentId', i) as number;
+
+					const options: IHttpRequestOptions = {
+						headers: {
+							Accept: 'application/json',
+						},
+						method: 'DELETE',
+						url: `/sepa-payments/${id}`,
 						json: true,
 					};
 
