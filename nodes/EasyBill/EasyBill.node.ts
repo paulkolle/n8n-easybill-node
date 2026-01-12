@@ -1,4 +1,5 @@
 import type {
+	GenericValue,
 	IDataObject,
 	IExecuteFunctions,
 	IHttpRequestOptions,
@@ -1462,7 +1463,9 @@ export class EasyBill implements INodeType {
 					const addFieldIfProvided = (
 						fieldName: string,
 						targetName: string,
-						transform?: (value: unknown) => unknown,
+						transform?: (
+							value: unknown,
+						) => IDataObject | IDataObject[] | GenericValue | GenericValue[],
 					) => {
 						if (!Object.prototype.hasOwnProperty.call(updateFields, fieldName)) {
 							return;
@@ -1477,10 +1480,14 @@ export class EasyBill implements INodeType {
 					addFieldIfProvided('debitorName', 'debitor_name');
 					addFieldIfProvided('debitorIban', 'debitor_iban');
 					addFieldIfProvided('mandateId', 'mandate_id');
-					addFieldIfProvided('mandateDateOfSignature', 'mandate_date_of_signature', (value) => {
-						const dateValue = toDateString(value as string);
-						return dateValue ?? value;
-					});
+					addFieldIfProvided(
+						'mandateDateOfSignature',
+						'mandate_date_of_signature',
+						(value: unknown) => {
+							const dateValue = toDateString(value as string);
+							return dateValue ?? (value as string);
+						},
+					);
 					addFieldIfProvided('localInstrument', 'local_instrument');
 					addFieldIfProvided('sequenceType', 'sequence_type');
 					addFieldIfProvided('amount', 'amount');
