@@ -7,7 +7,7 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeConnectionTypes, sleep } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError, sleep } from 'n8n-workflow';
 import { customerOperations } from './Customers/CustomerOperations';
 import { customerFields } from './Customers/CustomerFields';
 import { documentFields } from './Documents/DocumentsFields';
@@ -1393,10 +1393,32 @@ export class EasyBill implements INodeType {
 					const sequenceType = this.getNodeParameter('sequenceType', i) as string;
 					const amount = this.getNodeParameter('amount', i) as number;
 					const reference = this.getNodeParameter('reference', i) as string;
-					const requestedAt = this.getNodeParameter('requestedAt', i) as string;
+					const requestedAt = this.getNodeParameter('requestedAt', i, '') as string;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
 					const mandateDate = toDateString(mandateDateOfSignature) ?? mandateDateOfSignature;
-					const requestedDate = toDateString(requestedAt) ?? requestedAt;
+					const requiredFields: Array<{ key: string; value: string | undefined }> = [
+						{ key: 'debitor_name', value: debitorName },
+						{ key: 'debitor_iban', value: debitorIban },
+						{ key: 'mandate_id', value: mandateId },
+						{ key: 'mandate_date_of_signature', value: mandateDateOfSignature },
+						{ key: 'local_instrument', value: localInstrument },
+						{ key: 'sequence_type', value: sequenceType },
+						{ key: 'reference', value: reference },
+					];
+					const missingFields = requiredFields
+						.filter(({ value }) => typeof value !== 'string' || value.trim() === '')
+						.map(({ key }) => key);
+
+					if (missingFields.length > 0) {
+						throw new NodeOperationError(
+							this.getNode(),
+							`Missing required fields: ${missingFields.join(', ')}`,
+						);
+					}
+
+					const requestedDate = requestedAt
+						? (toDateString(requestedAt) ?? requestedAt)
+						: undefined;
 
 					const body: IDataObject = {
 						document_id: documentId,
@@ -1408,8 +1430,11 @@ export class EasyBill implements INodeType {
 						sequence_type: sequenceType,
 						amount,
 						reference,
-						requested_at: requestedDate,
 					};
+
+					if (requestedDate) {
+						body.requested_at = requestedDate;
+					}
 
 					Object.assign(body, mapSepaAdditionalFields(additionalFields));
 
