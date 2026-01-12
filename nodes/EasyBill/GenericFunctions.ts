@@ -68,7 +68,7 @@ export async function easyBillApiRequest<T = unknown>(
 		let detailedErrorDescription = `${errorResponseBody.message ?? response.statusMessage}`;
 		const faultyArguments = errorResponseBody.arguments;
 		if (faultyArguments) {
-			detailedErrorDescription += faultyArguments.join(', ');
+			detailedErrorDescription += ` ${faultyArguments.length === 1 ? "Feld: " : "Felder: "}${faultyArguments.join(', ')}`;
 		}
 		throw new NodeApiError(
 			this.getNode(),
