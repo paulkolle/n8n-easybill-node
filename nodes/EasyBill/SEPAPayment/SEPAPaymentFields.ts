@@ -242,12 +242,11 @@ export const sepaPaymentFields: INodeProperties[] = [
 		name: 'requestedAt',
 		type: 'string',
 		default: '',
-		required: true,
 		description: 'Booking date for the payment (YYYY-MM-DD or now)',
 		displayOptions: {
 			show: {
 				resource: ['sepaPayment'],
-				operation: ['createSepaPayment', 'updateSepaPayment'],
+				operation: ['createSepaPayment'],
 			},
 		},
 	},
@@ -330,6 +329,13 @@ export const sepaPaymentFields: INodeProperties[] = [
 				type: 'string',
 				default: '',
 				description: 'Payment reference',
+			},
+			{
+				displayName: 'Requested At',
+				name: 'requestedAt',
+				type: 'string',
+				default: '',
+				description: 'Booking date for the payment (YYYY-MM-DD or now)',
 			},
 			{
 				displayName: 'Sequence Type',

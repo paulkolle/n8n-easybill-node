@@ -1450,14 +1450,11 @@ export class EasyBill implements INodeType {
 				if (operation === 'updateSepaPayment') {
 					const id = this.getNodeParameter('sepaPaymentId', i) as number;
 					const documentId = this.getNodeParameter('documentId', i) as number;
-					const requestedAt = this.getNodeParameter('requestedAt', i) as string;
 					const updateFields = this.getNodeParameter('updateFields', i, {}) as IDataObject;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-					const requestedDate = toDateString(requestedAt) ?? requestedAt;
 
 					const body: IDataObject = {
 						document_id: documentId,
-						requested_at: requestedDate,
 					};
 
 					const addFieldIfProvided = (
@@ -1492,6 +1489,10 @@ export class EasyBill implements INodeType {
 					addFieldIfProvided('sequenceType', 'sequence_type');
 					addFieldIfProvided('amount', 'amount');
 					addFieldIfProvided('reference', 'reference');
+					addFieldIfProvided('requestedAt', 'requested_at', (value: unknown) => {
+						const dateValue = toDateString(value as string);
+						return dateValue ?? (value as string);
+					});
 
 					Object.assign(body, mapSepaAdditionalFields(additionalFields));
 
