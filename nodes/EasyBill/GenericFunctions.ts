@@ -11,6 +11,12 @@ import {
 const TOTAL_RETRIES = 9;
 const BASE_URL = 'https://api.easybill.de/rest/v1';
 
+type ErrorResponseBody = {
+	code?: number;
+	message?: string;
+	arguments?: string[];
+};
+
 export async function easyBillApiRequest<T = unknown>(
 	this: IExecuteFunctions | IHookFunctions | ILoadOptionsFunctions | IPollFunctions,
 	options: Omit<IHttpRequestOptions, 'baseURL' | 'returnFullResponse' | 'ignoreHttpStatusErrors'>,
@@ -58,13 +64,19 @@ export async function easyBillApiRequest<T = unknown>(
 			},
 		);
 	} else if (response.statusCode >= 400) {
+		const errorResponseBody = response.body as ErrorResponseBody;
+		let detailedErrorDescription = `${errorResponseBody.message ?? response.statusMessage}`;
+		const faultyArguments = errorResponseBody.arguments;
+		if (faultyArguments) {
+			detailedErrorDescription += ` ${faultyArguments.length === 1 ? 'Feld: ' : 'Felder: '}${faultyArguments.join(', ')}`;
+		}
 		throw new NodeApiError(
 			this.getNode(),
 			{},
 			{
 				message: response.statusMessage,
 				httpCode: response.statusCode.toString(),
-				description: response.statusMessage,
+				description: detailedErrorDescription,
 			},
 		);
 	}
