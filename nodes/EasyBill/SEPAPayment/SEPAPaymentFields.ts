@@ -379,7 +379,6 @@ export const sepaPaymentFields: INodeProperties[] = [
 				operation: ['createSepaPayment', 'updateSepaPayment'],
 			},
 		},
-		/* eslint-disable n8n-nodes-base/node-param-collection-type-unsorted-items */
 		options: [
 			{
 				displayName: 'Creditor BIC',
@@ -403,13 +402,6 @@ export const sepaPaymentFields: INodeProperties[] = [
 				description: 'Creditor name (mandatory for CREDIT)',
 			},
 			{
-				displayName: 'Debitor BIC',
-				name: 'debitorBic',
-				type: 'string',
-				default: '',
-				description: 'Debitor BIC (overwritten for CREDIT exports)',
-			},
-			{
 				displayName: 'Debitor Address Line 1',
 				name: 'debitorAddressLine1',
 				type: 'string',
@@ -421,6 +413,13 @@ export const sepaPaymentFields: INodeProperties[] = [
 				name: 'debitorAddressLine2',
 				type: 'string',
 				default: '',
+			},
+			{
+				displayName: 'Debitor BIC',
+				name: 'debitorBic',
+				type: 'string',
+				default: '',
+				description: 'Debitor BIC (overwritten for CREDIT exports)',
 			},
 			{
 				displayName: 'Debitor Country',
