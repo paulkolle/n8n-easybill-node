@@ -107,29 +107,12 @@ export const customerFields: INodeProperties[] = [
 					'Filter customers by last_name. You can add multiple names separated by commas like name,name,name.',
 			},
 			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				default: 50,
-				description: 'Max number of results to return',
-				typeOptions: {
-					minValue: 1,
-				},
-			},
-			{
 				displayName: 'Number',
 				name: 'number',
 				type: 'string',
 				default: '',
 				description:
 					'Filter customers by number. You can add multiple numbers separated by commas like no,no,no.',
-			},
-			{
-				displayName: 'Page',
-				name: 'page',
-				type: 'number',
-				default: 1,
-				description: 'Set current Page. Default is 1.',
 			},
 			{
 				displayName: 'Type',

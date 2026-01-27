@@ -37,23 +37,6 @@ export const discountFields: INodeProperties[] = [
 		description: 'Zusätzliche Query-Parameter für Positionsrabatte',
 		options: [
 			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				typeOptions: {
-					minValue: 1,
-				},
-				default: 50,
-				description: 'Max number of results to return',
-			},
-			{
-				displayName: 'Page',
-				name: 'page',
-				type: 'number',
-				default: 1,
-				description: 'Seitenzahl',
-			},
-			{
 				displayName: 'Customer ID',
 				name: 'customer_id',
 				type: 'string',
@@ -215,42 +198,6 @@ export const discountFields: INodeProperties[] = [
 			show: {
 				resource: ['discount'],
 				operation: ['updateDiscountPosition', 'updateDiscountPositionGroup'],
-			},
-		},
-	},
-	/* ╔══════════════════════════════════════════╗ */
-	/* ║  GET DISCOUNT / DISCOUNT GROUP POSITION  ║ */
-	/* ╚══════════════════════════════════════════╝ */
-	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		description: 'Zusätzliche Query-Parameter für Positionsrabatte',
-		options: [
-			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				typeOptions: {
-					minValue: 1,
-				},
-				default: 50,
-				description: 'Max number of results to return',
-			},
-			{
-				displayName: 'Page',
-				name: 'page',
-				type: 'number',
-				default: 1,
-				description: 'Seitenzahl',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['discount'],
-				operation: ['getDiscountPosition', 'getDiscountPositionGroup'],
 			},
 		},
 	},

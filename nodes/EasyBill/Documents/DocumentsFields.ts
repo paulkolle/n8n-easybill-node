@@ -43,35 +43,6 @@ export const documentFields: INodeProperties[] = [
 	/* ║  GET DOCUMENT LIST  ║ */
 	/* ╚═════════════════════╝ */
 	{
-		displayName: 'Limit',
-		name: 'limit',
-		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		default: 50,
-		description: 'Max number of results to return',
-		displayOptions: {
-			show: {
-				resource: ['document'],
-				operation: ['getDocList'],
-			},
-		},
-	},
-	{
-		displayName: 'Page',
-		name: 'page',
-		type: 'number',
-		default: 1,
-		description: 'Set current Page. Default is 1.',
-		displayOptions: {
-			show: {
-				resource: ['document'],
-				operation: ['getDocList'],
-			},
-		},
-	},
-	{
 		displayName: 'Additional Fields',
 		name: 'body',
 		type: 'collection',

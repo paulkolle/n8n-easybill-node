@@ -18,42 +18,6 @@ export const customerGroupFields: INodeProperties[] = [
 			},
 		},
 	},
-	/* ╔═══════════════════════════╗ */
-	/* ║  GET CUSTOMER GROUP LIST  ║ */
-	/* ╚═══════════════════════════╝ */
-	{
-		displayName: 'Additional Fields',
-		name: 'additionalFields',
-		type: 'collection',
-		placeholder: 'Add Field',
-		default: {},
-		description: 'Additional query parameters for the Customer Groups',
-		options: [
-			{
-				displayName: 'Limit',
-				name: 'limit',
-				type: 'number',
-				typeOptions: {
-					minValue: 1,
-				},
-				default: 50,
-				description: 'Max number of results to return',
-			},
-			{
-				displayName: 'Page',
-				name: 'page',
-				type: 'number',
-				default: 1,
-				description: 'Page number',
-			},
-		],
-		displayOptions: {
-			show: {
-				resource: ['customerGroup'],
-				operation: ['getCustomerGroups'],
-			},
-		},
-	},
 	/* ╔═════════════════════════╗ */
 	/* ║  CREATE CUSTOMER GROUP  ║ */
 	/* ╚═════════════════════════╝ */

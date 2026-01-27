@@ -19,7 +19,8 @@ import { discountOperations } from './Discount/DiscountOperations';
 import { discountFields } from './Discount/DiscountFields';
 import { sepaPaymentOperations } from './SEPAPayment/SEPAPaymentOperations';
 import { sepaPaymentFields } from './SEPAPayment/SEPAPaymentFields';
-import { easyBillApiRequest } from './GenericFunctions';
+import { easyBillApiRequest, fetchPaginatedList } from './GenericFunctions';
+
 /**
  * HAUPTEINSTIEG: EasyBill Node
  *
@@ -353,37 +354,12 @@ export class EasyBill implements INodeType {
 				/* ║  GET DOCUMENT LIST  ║ */
 				/* ╚═════════════════════╝ */
 				if (operation === 'getDocList') {
-					// Hole die Parameter; bei optionalen Parametern wird undefined zurückgegeben, falls nicht gesetzt
-					const limit = this.getNodeParameter('limit', i) as number | undefined;
-					const page = this.getNodeParameter('page', i) as number | undefined;
-					const additionalFields = this.getNodeParameter('body', i) as IDataObject;
+					const filters = this.getNodeParameter('body', i, {}) as IDataObject;
+					const aggregated = await fetchPaginatedList.call(this, '/documents', filters);
 
-					// Baue das qs-Objekt dynamisch auf
-					const qs: IDataObject = {};
-
-					if (limit !== undefined && limit !== null) {
-						qs.limit = limit;
+					if (aggregated) {
+						returnData.push(aggregated);
 					}
-					if (page !== undefined && page !== null) {
-						qs.page = page;
-					}
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(qs, additionalFields);
-					}
-
-					// Erstelle die HTTP-Request-Optionen für die GET-Anfrage
-					const options: IHttpRequestOptions = {
-						headers: {
-							Accept: 'application/json',
-						},
-						method: 'GET',
-						url: `/documents`,
-						json: true,
-						qs,
-					};
-
-					responseData = await easyBillApiRequest.call(this, options);
-					returnData.push(responseData);
 				}
 				/* ╔════════════════╗ */
 				/* ║  GET DOCUMENT  ║ */
@@ -704,29 +680,12 @@ export class EasyBill implements INodeType {
 				/* ║  GET CUSTOMER LIST  ║ */
 				/* ╚═════════════════════╝ */
 				if (operation === 'getCustomerList') {
-					// Hole optional additionalFields als Query-Parameter
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+					const aggregated = await fetchPaginatedList.call(this, '/customers', additionalFields);
 
-					// Baue das qs-Objekt dynamisch auf
-					const qs: IDataObject = {};
-
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(qs, additionalFields);
+					if (aggregated) {
+						returnData.push(aggregated);
 					}
-
-					// Erstelle die HTTP-Request-Optionen für die GET-Anfrage
-					const options: IHttpRequestOptions = {
-						headers: {
-							Accept: 'application/json',
-						},
-						method: 'GET',
-						url: `/customers`,
-						qs,
-						json: true,
-					};
-
-					responseData = await easyBillApiRequest.call(this, options);
-					returnData.push(responseData);
 				}
 				/* ╔═══════════════════╗ */
 				/* ║  UPDATE CUSTOMER  ║ */
@@ -777,27 +736,11 @@ export class EasyBill implements INodeType {
 				/* ║  GET CUSTOMER GROUP LIST  ║ */
 				/* ╚═══════════════════════════╝ */
 				if (operation === 'getCustomerGroups') {
-					// Optionale zusätzliche Query-Parameter
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					const aggregated = await fetchPaginatedList.call(this, '/customer-groups');
 
-					const qs: IDataObject = {};
-
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(qs, additionalFields);
+					if (aggregated) {
+						returnData.push(aggregated);
 					}
-
-					const options: IHttpRequestOptions = {
-						headers: {
-							Accept: 'application/json',
-						},
-						method: 'GET',
-						url: `/customer-groups`,
-						json: true,
-						qs,
-					};
-
-					responseData = await easyBillApiRequest.call(this, options);
-					returnData.push(responseData);
 				}
 				/* ╔═════════════════════════╗ */
 				/* ║  CREATE CUSTOMER GROUP  ║ */
@@ -906,27 +849,16 @@ export class EasyBill implements INodeType {
 				/* ║  GET POSITION DISCOUNT LIST  ║ */
 				/* ╚══════════════════════════════╝ */
 				if (operation === 'getDiscountsPosition') {
-					// Optionale zusätzliche Query-Parameter
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+					const aggregated = await fetchPaginatedList.call(
+						this,
+						'/discounts/position',
+						additionalFields,
+					);
 
-					const qs: IDataObject = {};
-
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(qs, additionalFields);
+					if (aggregated) {
+						returnData.push(aggregated);
 					}
-
-					const options: IHttpRequestOptions = {
-						headers: {
-							Accept: 'application/json',
-						},
-						method: 'GET',
-						url: `/discounts/position`,
-						json: true,
-						qs,
-					};
-
-					responseData = await easyBillApiRequest.call(this, options);
-					returnData.push(responseData);
 				}
 				/* ╔════════════════════════════╗ */
 				/* ║  CREATE POSITION DISCOUNT  ║ */
@@ -1047,24 +979,16 @@ export class EasyBill implements INodeType {
 				/* ║  GET POSITION GROUP DISCOUNT LIST  ║ */
 				/* ╚════════════════════════════════════╝ */
 				if (operation === 'getDiscountsPositionGroup') {
-					// Optionale zusätzliche Query-Parameter
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					const qs: IDataObject = {};
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(qs, additionalFields);
-					}
-					const options: IHttpRequestOptions = {
-						headers: {
-							Accept: 'application/json',
-						},
-						method: 'GET',
-						url: `/discounts/position-group`,
-						json: true,
-						qs,
-					};
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+					const aggregated = await fetchPaginatedList.call(
+						this,
+						'/discounts/position-group',
+						additionalFields,
+					);
 
-					responseData = await easyBillApiRequest.call(this, options);
-					returnData.push(responseData);
+					if (aggregated) {
+						returnData.push(aggregated);
+					}
 				}
 				/* ╔══════════════════════════════════╗ */
 				/* ║  CREATE POSITION GROUP DISCOUNT  ║ */
@@ -1189,34 +1113,16 @@ export class EasyBill implements INodeType {
 				/* ║  GET DOCUMENT PAYMENT LIST  ║ */
 				/* ╚═════════════════════════════╝ */
 				if (operation === 'getDocumentPayments') {
-					// Hole optionale Parameter: limit, page und weitere Query-Parameter
-					const limit = this.getNodeParameter('limit', i) as number | undefined;
-					const page = this.getNodeParameter('page', i) as number | undefined;
-					const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-					const qs: IDataObject = {};
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
+					const aggregated = await fetchPaginatedList.call(
+						this,
+						'/document-payments',
+						additionalFields,
+					);
 
-					if (limit !== undefined) {
-						qs.limit = limit;
+					if (aggregated) {
+						returnData.push(aggregated);
 					}
-					if (page !== undefined) {
-						qs.page = page;
-					}
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(qs, additionalFields);
-					}
-
-					const options: IHttpRequestOptions = {
-						headers: {
-							Accept: 'application/json',
-						},
-						method: 'GET',
-						url: `/document-payments`,
-						json: true,
-						qs,
-					};
-
-					responseData = await easyBillApiRequest.call(this, options);
-					returnData.push(responseData);
 				}
 				/* ╔═══════════════════════════╗ */
 				/* ║  CREATE DOCUMENT PAYMENT  ║ */
@@ -1307,6 +1213,7 @@ export class EasyBill implements INodeType {
 				const mapSepaAdditionalFields = (fields: IDataObject) => {
 					const payload: IDataObject = {};
 					const mapping: Record<string, string> = {
+						document_id: 'document_id',
 						creditorBic: 'creditor_bic',
 						creditorIban: 'creditor_iban',
 						creditorName: 'creditor_name',
@@ -1349,97 +1256,16 @@ export class EasyBill implements INodeType {
 				/* ║  GET SEPA PAYMENTS LIST  ║ */
 				/* ╚══════════════════════════╝ */
 				if (operation === 'getSepaPayments') {
-					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-					// set maximum limit (aka page size) to reduce number of HTTP requests
-					const baseQuery: IDataObject = { limit: 1000 };
+					const rawAdditionalFields = this.getNodeParameter(
+						'additionalFields',
+						i,
+						{},
+					) as IDataObject;
+					const mappedQuery = mapSepaAdditionalFields(rawAdditionalFields);
+					const aggregated = await fetchPaginatedList.call(this, '/sepa-payments', mappedQuery);
 
-					if (additionalFields && Object.keys(additionalFields).length > 0) {
-						Object.assign(baseQuery, additionalFields);
-					}
-
-					let nextPage = 1;
-					let previousPage: number | undefined;
-					let aggregatedResponse: IDataObject | undefined;
-					const aggregatedItems: IDataObject[] = [];
-					let apiReportedTotal: number | undefined;
-					let apiReportedPageLimit: number | undefined;
-					let apiReportedPages: number | undefined;
-
-					// Accumulates SEPA payment pages until the EasyBill API signals completion.
-					while (true) {
-						const qs: IDataObject = { ...baseQuery, page: nextPage };
-
-						const options: IHttpRequestOptions = {
-							headers: {
-								Accept: 'application/json',
-							},
-							method: 'GET',
-							url: `/sepa-payments`,
-							json: true,
-							qs,
-						};
-
-						responseData = await easyBillApiRequest.call(this, options);
-						const responseObject = responseData as IDataObject;
-						const items = Array.isArray(responseObject.items)
-							? (responseObject.items as IDataObject[])
-							: [];
-
-						if (!aggregatedResponse) {
-							aggregatedResponse = { ...responseObject };
-						}
-
-						if (typeof responseObject.total === 'number') {
-							apiReportedTotal = responseObject.total;
-						}
-						if (typeof responseObject.limit === 'number') {
-							apiReportedPageLimit = responseObject.limit;
-						}
-
-						aggregatedItems.push(...items);
-
-						const currentPage =
-							typeof responseObject.page === 'number' ? responseObject.page : nextPage;
-
-						if (typeof responseObject.pages === 'number') {
-							apiReportedPages = responseObject.pages;
-						}
-
-						const reachedApiTotal =
-							apiReportedTotal !== undefined && aggregatedItems.length >= apiReportedTotal;
-						const reachedLastPageByReport =
-							apiReportedPages !== undefined && currentPage >= apiReportedPages;
-						const noMoreItems = items.length === 0;
-						const stuckOnSamePage = previousPage !== undefined && currentPage === previousPage;
-
-						if (reachedApiTotal || reachedLastPageByReport || noMoreItems || stuckOnSamePage) {
-							break;
-						}
-
-						previousPage = currentPage;
-						nextPage = currentPage + 1;
-					}
-
-					if (aggregatedResponse) {
-						const effectivePageSize = apiReportedPageLimit ?? 100;
-						const totalItemsReturned = aggregatedItems.length;
-						const resultTotal = apiReportedTotal ?? totalItemsReturned;
-
-						aggregatedResponse.items = aggregatedItems;
-						aggregatedResponse.total = resultTotal;
-						aggregatedResponse.page = 1;
-						aggregatedResponse.limit = apiReportedPageLimit ?? totalItemsReturned;
-
-						if (apiReportedPages !== undefined) {
-							aggregatedResponse.pages = apiReportedPages;
-						} else if (effectivePageSize > 0) {
-							aggregatedResponse.pages = Math.max(
-								1,
-								Math.ceil(totalItemsReturned / effectivePageSize),
-							);
-						}
-
-						returnData.push(aggregatedResponse);
+					if (aggregated) {
+						returnData.push(aggregated);
 					}
 				}
 				/* ╔════════════════════════╗ */
