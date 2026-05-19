@@ -22,6 +22,19 @@ export const sepaPaymentFields: INodeProperties[] = [
 	/* ║  GET SEPA PAYMENTS  ║ */
 	/* ╚══════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['sepaPayment'],
+				operation: ['getSepaPayments'],
+			},
+		},
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',
@@ -36,11 +49,28 @@ export const sepaPaymentFields: INodeProperties[] = [
 		},
 		options: [
 			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
+				description: 'Max number of results to return',
+			},
+			{
 				displayName: 'Document IDs',
 				name: 'document_id',
 				type: 'string',
 				default: '',
 				description: 'Comma-separated document IDs (document_id)',
+			},
+			{
+				displayName: 'Page',
+				name: 'page',
+				type: 'number',
+				default: 1,
+				description: 'Set current Page. Default is 1.',
 			},
 		],
 	},

@@ -354,11 +354,38 @@ export class EasyBill implements INodeType {
 				/* ║  GET DOCUMENT LIST  ║ */
 				/* ╚═════════════════════╝ */
 				if (operation === 'getDocList') {
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
+					const limit = this.getNodeParameter('limit', i) as number | undefined;
+					const page = this.getNodeParameter('page', i) as number | undefined;
 					const filters = this.getNodeParameter('body', i, {}) as IDataObject;
-					const aggregated = await fetchPaginatedList.call(this, '/documents', filters);
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(this, '/documents', filters);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = { ...filters };
+						if (limit !== undefined && limit !== null) {
+							qs.limit = limit;
+						}
+						if (page !== undefined && page !== null) {
+							qs.page = page;
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/documents`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔════════════════╗ */
@@ -680,11 +707,34 @@ export class EasyBill implements INodeType {
 				/* ║  GET CUSTOMER LIST  ║ */
 				/* ╚═════════════════════╝ */
 				if (operation === 'getCustomerList') {
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-					const aggregated = await fetchPaginatedList.call(this, '/customers', additionalFields);
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(this, '/customers', additionalFields);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = {};
+
+						if (additionalFields && Object.keys(additionalFields).length > 0) {
+							Object.assign(qs, additionalFields);
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/customers`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔═══════════════════╗ */
@@ -736,10 +786,38 @@ export class EasyBill implements INodeType {
 				/* ║  GET CUSTOMER GROUP LIST  ║ */
 				/* ╚═══════════════════════════╝ */
 				if (operation === 'getCustomerGroups') {
-					const aggregated = await fetchPaginatedList.call(this, '/customer-groups');
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
+					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(
+							this,
+							'/customer-groups',
+							additionalFields,
+						);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = {};
+
+						if (additionalFields && Object.keys(additionalFields).length > 0) {
+							Object.assign(qs, additionalFields);
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/customer-groups`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔═════════════════════════╗ */
@@ -849,15 +927,38 @@ export class EasyBill implements INodeType {
 				/* ║  GET POSITION DISCOUNT LIST  ║ */
 				/* ╚══════════════════════════════╝ */
 				if (operation === 'getDiscountsPosition') {
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-					const aggregated = await fetchPaginatedList.call(
-						this,
-						'/discounts/position',
-						additionalFields,
-					);
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(
+							this,
+							'/discounts/position',
+							additionalFields,
+						);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = {};
+
+						if (additionalFields && Object.keys(additionalFields).length > 0) {
+							Object.assign(qs, additionalFields);
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/discounts/position`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔════════════════════════════╗ */
@@ -979,15 +1080,38 @@ export class EasyBill implements INodeType {
 				/* ║  GET POSITION GROUP DISCOUNT LIST  ║ */
 				/* ╚════════════════════════════════════╝ */
 				if (operation === 'getDiscountsPositionGroup') {
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-					const aggregated = await fetchPaginatedList.call(
-						this,
-						'/discounts/position-group',
-						additionalFields,
-					);
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(
+							this,
+							'/discounts/position-group',
+							additionalFields,
+						);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = {};
+
+						if (additionalFields && Object.keys(additionalFields).length > 0) {
+							Object.assign(qs, additionalFields);
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/discounts/position-group`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔══════════════════════════════════╗ */
@@ -1113,15 +1237,42 @@ export class EasyBill implements INodeType {
 				/* ║  GET DOCUMENT PAYMENT LIST  ║ */
 				/* ╚═════════════════════════════╝ */
 				if (operation === 'getDocumentPayments') {
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
+					const limit = this.getNodeParameter('limit', i) as number | undefined;
+					const page = this.getNodeParameter('page', i) as number | undefined;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
-					const aggregated = await fetchPaginatedList.call(
-						this,
-						'/document-payments',
-						additionalFields,
-					);
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(
+							this,
+							'/document-payments',
+							additionalFields,
+						);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = { ...additionalFields };
+						if (limit !== undefined && limit !== null) {
+							qs.limit = limit;
+						}
+						if (page !== undefined && page !== null) {
+							qs.page = page;
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/document-payments`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔═══════════════════════════╗ */
@@ -1230,6 +1381,11 @@ export class EasyBill implements INodeType {
 							continue;
 						}
 
+						if (key === 'limit' || key === 'page') {
+							payload[key] = value;
+							continue;
+						}
+
 						if (key === 'exportAt') {
 							payload.export_at = value;
 							continue;
@@ -1256,16 +1412,39 @@ export class EasyBill implements INodeType {
 				/* ║  GET SEPA PAYMENTS LIST  ║ */
 				/* ╚══════════════════════════╝ */
 				if (operation === 'getSepaPayments') {
+					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
 					const rawAdditionalFields = this.getNodeParameter(
 						'additionalFields',
 						i,
 						{},
 					) as IDataObject;
 					const mappedQuery = mapSepaAdditionalFields(rawAdditionalFields);
-					const aggregated = await fetchPaginatedList.call(this, '/sepa-payments', mappedQuery);
 
-					if (aggregated) {
-						returnData.push(aggregated);
+					if (returnAll) {
+						const aggregated = await fetchPaginatedList.call(this, '/sepa-payments', mappedQuery);
+
+						if (aggregated) {
+							returnData.push(aggregated);
+						}
+					} else {
+						const qs: IDataObject = {};
+
+						if (mappedQuery && Object.keys(mappedQuery).length > 0) {
+							Object.assign(qs, mappedQuery);
+						}
+
+						const options: IHttpRequestOptions = {
+							headers: {
+								Accept: 'application/json',
+							},
+							method: 'GET',
+							url: `/sepa-payments`,
+							json: true,
+							qs,
+						};
+
+						responseData = await easyBillApiRequest.call(this, options);
+						returnData.push(responseData);
 					}
 				}
 				/* ╔════════════════════════╗ */

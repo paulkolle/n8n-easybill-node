@@ -18,6 +18,55 @@ export const customerGroupFields: INodeProperties[] = [
 			},
 		},
 	},
+	/* ╔═══════════════════════════╗ */
+	/* ║  GET CUSTOMER GROUP LIST  ║ */
+	/* ╚═══════════════════════════╝ */
+	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['customerGroup'],
+				operation: ['getCustomerGroups'],
+			},
+		},
+	},
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		description: 'Additional query parameters for customer groups',
+		options: [
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
+				description: 'Max number of results to return',
+			},
+			{
+				displayName: 'Page',
+				name: 'page',
+				type: 'number',
+				default: 1,
+				description: 'Page number when Return All is off',
+			},
+		],
+		displayOptions: {
+			show: {
+				resource: ['customerGroup'],
+				operation: ['getCustomerGroups'],
+			},
+		},
+	},
 	/* ╔═════════════════════════╗ */
 	/* ║  CREATE CUSTOMER GROUP  ║ */
 	/* ╚═════════════════════════╝ */

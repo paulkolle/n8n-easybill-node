@@ -22,6 +22,50 @@ export const documentPaymentFields: INodeProperties[] = [
 	/* ║  GET DOCUMENT PAYMENT LIST  ║ */
 	/* ╚═════════════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['documentPayment'],
+				operation: ['getDocumentPayments'],
+			},
+		},
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		type: 'number',
+		typeOptions: {
+			minValue: 1,
+		},
+		default: 50,
+		description: 'Max number of results to return',
+		displayOptions: {
+			show: {
+				resource: ['documentPayment'],
+				operation: ['getDocumentPayments'],
+				returnAll: [false],
+			},
+		},
+	},
+	{
+		displayName: 'Page',
+		name: 'page',
+		type: 'number',
+		default: 1,
+		description: 'Page number',
+		displayOptions: {
+			show: {
+				resource: ['documentPayment'],
+				operation: ['getDocumentPayments'],
+				returnAll: [false],
+			},
+		},
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',

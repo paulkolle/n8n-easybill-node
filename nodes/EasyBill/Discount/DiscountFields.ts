@@ -29,6 +29,19 @@ export const discountFields: INodeProperties[] = [
 	/* ║  GET POSITION / POSITION GROUPS DISCOUNT LIST  ║ */
 	/* ╚════════════════════════════════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['discount'],
+				operation: ['getDiscountsPosition', 'getDiscountsPositionGroup'],
+			},
+		},
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',
@@ -36,6 +49,23 @@ export const discountFields: INodeProperties[] = [
 		default: {},
 		description: 'Zusätzliche Query-Parameter für Positionsrabatte',
 		options: [
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
+				description: 'Max number of results to return',
+			},
+			{
+				displayName: 'Page',
+				name: 'page',
+				type: 'number',
+				default: 1,
+				description: 'Page number when Return All is off',
+			},
 			{
 				displayName: 'Customer ID',
 				name: 'customer_id',
