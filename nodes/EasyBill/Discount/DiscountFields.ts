@@ -218,6 +218,42 @@ export const discountFields: INodeProperties[] = [
 			},
 		},
 	},
+	/* ╔══════════════════════════════════════════╗ */
+	/* ║  GET DISCOUNT / DISCOUNT GROUP POSITION  ║ */
+	/* ╚══════════════════════════════════════════╝ */
+	{
+		displayName: 'Additional Fields',
+		name: 'additionalFields',
+		type: 'collection',
+		placeholder: 'Add Field',
+		default: {},
+		description: 'Zusätzliche Query-Parameter für Positionsrabatte',
+		options: [
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				typeOptions: {
+					minValue: 1,
+				},
+				default: 50,
+				description: 'Max number of results to return',
+			},
+			{
+				displayName: 'Page',
+				name: 'page',
+				type: 'number',
+				default: 1,
+				description: 'Set current Page. Default is 1.',
+			},
+		],
+		displayOptions: {
+			show: {
+				resource: ['discount'],
+				operation: ['getDiscountPosition', 'getDiscountPositionGroup'],
+			},
+		},
+	},
 	{
 		displayName: 'Position ID',
 		name: 'position_id',

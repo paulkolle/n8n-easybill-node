@@ -1166,6 +1166,7 @@ export class EasyBill implements INodeType {
 						method: 'GET',
 						url: `/discounts/position-group/${discountId}`,
 						json: true,
+						qs,
 					};
 
 					responseData = await easyBillApiRequest.call(this, options);
