@@ -122,8 +122,11 @@ async function fetchPaginatedList(
 	let apiReportedPages: number | undefined;
 	let nextPage = 1;
 	let previousPage: number | undefined;
+	let requestsAttempted = 0;
+	let completedPagination = false;
 
 	for (let requestIndex = 0; requestIndex < MAX_PAGINATION_REQUESTS; requestIndex++) {
+		requestsAttempted = requestIndex + 1;
 		const qs: IDataObject = { ...baseQuery, limit: MAX_PAGE_SIZE, page: nextPage };
 		const options: IHttpRequestOptions = {
 			headers: {
@@ -181,7 +184,22 @@ async function fetchPaginatedList(
 		const stuckOnSamePage = previousPage !== undefined && currentPage === previousPage;
 
 		if (reachedApiTotal || reachedLastPageByReport || noMoreItems || stuckOnSamePage) {
+			completedPagination = true;
 			break;
+		}
+
+		if (apiReportedPages !== undefined && apiReportedPages > MAX_PAGINATION_REQUESTS) {
+			throw new NodeApiError(
+				this.getNode(),
+				{},
+				{
+					message: 'Pagination request limit reached',
+					description:
+						`Endpoint "${endpoint}" reports ${apiReportedPages} pages which exceeds the safety limit of ${MAX_PAGINATION_REQUESTS}. ` +
+						`Requests attempted: ${requestsAttempted}. Items fetched: ${aggregatedItems.length}. ` +
+						'Reduce the result set with filters or disable Return All and paginate manually.',
+				},
+			);
 		}
 
 		previousPage = currentPage;
@@ -190,6 +208,27 @@ async function fetchPaginatedList(
 
 	if (!aggregatedResponse) {
 		return undefined;
+	}
+
+	if (!completedPagination) {
+		const reportedTotal =
+			apiReportedTotal !== undefined ? ` Reported total: ${apiReportedTotal}.` : '';
+		const reportedPages =
+			apiReportedPages !== undefined ? ` Reported pages: ${apiReportedPages}.` : '';
+
+		throw new NodeApiError(
+			this.getNode(),
+			{},
+			{
+				message: 'Pagination request limit reached',
+				description:
+					`Endpoint "${endpoint}" reached the safety limit of ${MAX_PAGINATION_REQUESTS} pagination requests before completion. ` +
+					`Requests attempted: ${requestsAttempted}. Items fetched: ${aggregatedItems.length}.` +
+					reportedTotal +
+					reportedPages +
+					' Reduce the result set with filters or disable Return All and paginate manually.',
+			},
+		);
 	}
 
 	const effectivePageSize = apiReportedPageLimit ?? MAX_PAGE_SIZE;
