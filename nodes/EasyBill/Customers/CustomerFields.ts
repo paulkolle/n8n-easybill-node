@@ -128,6 +128,11 @@ export const customerFields: INodeProperties[] = [
 				typeOptions: {
 					minValue: 1,
 				},
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Number',
@@ -143,6 +148,11 @@ export const customerFields: INodeProperties[] = [
 				type: 'number',
 				default: 1,
 				description: 'Set current page when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Type',

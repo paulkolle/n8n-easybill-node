@@ -51,6 +51,11 @@ export const customerGroupFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Page',
@@ -58,6 +63,11 @@ export const customerGroupFields: INodeProperties[] = [
 				type: 'number',
 				default: 1,
 				description: 'Page number when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 		],
 		displayOptions: {

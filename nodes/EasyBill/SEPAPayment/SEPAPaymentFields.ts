@@ -57,6 +57,11 @@ export const sepaPaymentFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Document IDs',
@@ -71,6 +76,11 @@ export const sepaPaymentFields: INodeProperties[] = [
 				type: 'number',
 				default: 1,
 				description: 'Set current Page. Default is 1.',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 		],
 	},

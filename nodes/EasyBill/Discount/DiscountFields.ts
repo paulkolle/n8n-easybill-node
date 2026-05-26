@@ -58,6 +58,11 @@ export const discountFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Page',
@@ -65,6 +70,11 @@ export const discountFields: INodeProperties[] = [
 				type: 'number',
 				default: 1,
 				description: 'Page number when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Customer ID',
@@ -238,6 +248,11 @@ export const discountFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Page',
@@ -245,6 +260,11 @@ export const discountFields: INodeProperties[] = [
 				type: 'number',
 				default: 1,
 				description: 'Page number when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 		],
 		displayOptions: {
