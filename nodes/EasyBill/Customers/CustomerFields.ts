@@ -36,7 +36,7 @@ export const customerFields: INodeProperties[] = [
 		displayName: 'Return All',
 		name: 'returnAll',
 		type: 'boolean',
-		default: true,
+		default: false,
 		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
