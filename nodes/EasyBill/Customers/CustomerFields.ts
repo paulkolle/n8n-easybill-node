@@ -33,6 +33,19 @@ export const customerFields: INodeProperties[] = [
 	/* ║  GET CUSTOMER LIST  ║ */
 	/* ╚═════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				operation: ['getCustomerList'],
+				resource: ['customer'],
+			},
+		},
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',
@@ -115,6 +128,11 @@ export const customerFields: INodeProperties[] = [
 				typeOptions: {
 					minValue: 1,
 				},
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Number',
@@ -129,7 +147,12 @@ export const customerFields: INodeProperties[] = [
 				name: 'page',
 				type: 'number',
 				default: 1,
-				description: 'Set current Page. Default is 1.',
+				description: 'Set current page when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Type',

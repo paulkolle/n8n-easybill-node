@@ -22,12 +22,25 @@ export const customerGroupFields: INodeProperties[] = [
 	/* ║  GET CUSTOMER GROUP LIST  ║ */
 	/* ╚═══════════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['customerGroup'],
+				operation: ['getCustomerGroups'],
+			},
+		},
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',
 		placeholder: 'Add Field',
 		default: {},
-		description: 'Additional query parameters for the Customer Groups',
+		description: 'Additional query parameters for customer groups',
 		options: [
 			{
 				displayName: 'Limit',
@@ -38,13 +51,23 @@ export const customerGroupFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Page',
 				name: 'page',
 				type: 'number',
 				default: 1,
-				description: 'Page number',
+				description: 'Page number when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 		],
 		displayOptions: {

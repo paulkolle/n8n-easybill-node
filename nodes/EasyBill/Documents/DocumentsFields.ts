@@ -43,6 +43,19 @@ export const documentFields: INodeProperties[] = [
 	/* ║  GET DOCUMENT LIST  ║ */
 	/* ╚═════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['document'],
+				operation: ['getDocList'],
+			},
+		},
+	},
+	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
@@ -55,6 +68,7 @@ export const documentFields: INodeProperties[] = [
 			show: {
 				resource: ['document'],
 				operation: ['getDocList'],
+				returnAll: [false],
 			},
 		},
 	},
@@ -63,11 +77,12 @@ export const documentFields: INodeProperties[] = [
 		name: 'page',
 		type: 'number',
 		default: 1,
-		description: 'Set current Page. Default is 1.',
+		description: 'Page number when Return All is off',
 		displayOptions: {
 			show: {
 				resource: ['document'],
 				operation: ['getDocList'],
+				returnAll: [false],
 			},
 		},
 	},

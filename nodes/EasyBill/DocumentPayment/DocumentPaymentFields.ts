@@ -22,6 +22,19 @@ export const documentPaymentFields: INodeProperties[] = [
 	/* ║  GET DOCUMENT PAYMENT LIST  ║ */
 	/* ╚═════════════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['documentPayment'],
+				operation: ['getDocumentPayments'],
+			},
+		},
+	},
+	{
 		displayName: 'Limit',
 		name: 'limit',
 		type: 'number',
@@ -34,6 +47,7 @@ export const documentPaymentFields: INodeProperties[] = [
 			show: {
 				resource: ['documentPayment'],
 				operation: ['getDocumentPayments'],
+				returnAll: [false],
 			},
 		},
 	},
@@ -42,11 +56,12 @@ export const documentPaymentFields: INodeProperties[] = [
 		name: 'page',
 		type: 'number',
 		default: 1,
-		description: 'Seitenzahl',
+		description: 'Page number when Return All is off',
 		displayOptions: {
 			show: {
 				resource: ['documentPayment'],
 				operation: ['getDocumentPayments'],
+				returnAll: [false],
 			},
 		},
 	},

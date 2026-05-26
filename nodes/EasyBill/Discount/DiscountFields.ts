@@ -29,6 +29,19 @@ export const discountFields: INodeProperties[] = [
 	/* ║  GET POSITION / POSITION GROUPS DISCOUNT LIST  ║ */
 	/* ╚════════════════════════════════════════════════╝ */
 	{
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: false,
+		description: 'Whether to return all results or only up to a given limit',
+		displayOptions: {
+			show: {
+				resource: ['discount'],
+				operation: ['getDiscountsPosition', 'getDiscountsPositionGroup'],
+			},
+		},
+	},
+	{
 		displayName: 'Additional Fields',
 		name: 'additionalFields',
 		type: 'collection',
@@ -45,13 +58,23 @@ export const discountFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Page',
 				name: 'page',
 				type: 'number',
 				default: 1,
-				description: 'Seitenzahl',
+				description: 'Page number when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Customer ID',
@@ -205,19 +228,6 @@ export const discountFields: INodeProperties[] = [
 			},
 		},
 	},
-	{
-		displayName: 'Position ID',
-		name: 'position_id',
-		type: 'number',
-		default: 0,
-		description: 'The identifier for the position',
-		displayOptions: {
-			show: {
-				resource: ['discount'],
-				operation: ['updateDiscountPosition', 'updateDiscountPositionGroup'],
-			},
-		},
-	},
 	/* ╔══════════════════════════════════════════╗ */
 	/* ║  GET DISCOUNT / DISCOUNT GROUP POSITION  ║ */
 	/* ╚══════════════════════════════════════════╝ */
@@ -238,19 +248,42 @@ export const discountFields: INodeProperties[] = [
 				},
 				default: 50,
 				description: 'Max number of results to return',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 			{
 				displayName: 'Page',
 				name: 'page',
 				type: 'number',
 				default: 1,
-				description: 'Seitenzahl',
+				description: 'Page number when Return All is off',
+				displayOptions: {
+					show: {
+						'/returnAll': [false],
+					},
+				},
 			},
 		],
 		displayOptions: {
 			show: {
 				resource: ['discount'],
 				operation: ['getDiscountPosition', 'getDiscountPositionGroup'],
+			},
+		},
+	},
+	{
+		displayName: 'Position ID',
+		name: 'position_id',
+		type: 'number',
+		default: 0,
+		description: 'The identifier for the position',
+		displayOptions: {
+			show: {
+				resource: ['discount'],
+				operation: ['updateDiscountPosition', 'updateDiscountPositionGroup'],
 			},
 		},
 	},
