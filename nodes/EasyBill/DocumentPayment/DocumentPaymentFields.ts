@@ -56,7 +56,7 @@ export const documentPaymentFields: INodeProperties[] = [
 		name: 'page',
 		type: 'number',
 		default: 1,
-		description: 'Page number',
+		description: 'Page number when Return All is off',
 		displayOptions: {
 			show: {
 				resource: ['documentPayment'],

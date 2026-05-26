@@ -77,7 +77,7 @@ export const documentFields: INodeProperties[] = [
 		name: 'page',
 		type: 'number',
 		default: 1,
-		description: 'Set current page',
+		description: 'Page number when Return All is off',
 		displayOptions: {
 			show: {
 				resource: ['document'],

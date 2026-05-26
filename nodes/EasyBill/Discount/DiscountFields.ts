@@ -244,7 +244,7 @@ export const discountFields: INodeProperties[] = [
 				name: 'page',
 				type: 'number',
 				default: 1,
-				description: 'Set current Page. Default is 1.',
+				description: 'Page number when Return All is off',
 			},
 		],
 		displayOptions: {
