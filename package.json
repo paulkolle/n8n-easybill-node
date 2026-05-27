@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-easybill",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Integration der EasyBill Api in n8n",
 	"license": "MIT",
 	"homepage": "https://paulkolle.de",
