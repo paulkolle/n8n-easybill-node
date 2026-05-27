@@ -20,6 +20,8 @@ import { discountFields } from './Discount/DiscountFields';
 import { sepaPaymentOperations } from './SEPAPayment/SEPAPaymentOperations';
 import { sepaPaymentFields } from './SEPAPayment/SEPAPaymentFields';
 import { easyBillApiRequest, fetchPaginatedList } from './GenericFunctions';
+import { documentPaymentOperations } from './DocumentPayment/DocumentPaymentOperations';
+import { documentPaymentFields } from './DocumentPayment/DocumentPaymentFields';
 
 /**
  * HAUPTEINSTIEG: EasyBill Node
@@ -72,6 +74,7 @@ export class EasyBill implements INodeType {
 					{ name: 'Customer Group', value: 'customerGroup' },
 					{ name: 'Discount', value: 'discount' },
 					{ name: 'Document', value: 'document' },
+					{ name: 'Document Payment', value: 'documentPayment' },
 					{ name: 'SEPA Payment', value: 'sepaPayment' },
 
 					// Weitere Ressourcen können hier ergänzt werden.
@@ -87,6 +90,8 @@ export class EasyBill implements INodeType {
 			...customerGroupFields,
 			...discountOperations,
 			...discountFields,
+			...documentPaymentOperations,
+			...documentPaymentFields,
 			...sepaPaymentOperations,
 			...sepaPaymentFields,
 
