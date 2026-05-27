@@ -355,8 +355,6 @@ export class EasyBill implements INodeType {
 				/* ╚═════════════════════╝ */
 				if (operation === 'getDocList') {
 					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
-					const limit = this.getNodeParameter('limit', i) as number | undefined;
-					const page = this.getNodeParameter('page', i) as number | undefined;
 					const filters = this.getNodeParameter('body', i, {}) as IDataObject;
 
 					if (returnAll) {
@@ -366,13 +364,9 @@ export class EasyBill implements INodeType {
 							returnData.push(aggregated);
 						}
 					} else {
-						const qs: IDataObject = { ...filters };
-						if (limit !== undefined && limit !== null) {
-							qs.limit = limit;
-						}
-						if (page !== undefined && page !== null) {
-							qs.page = page;
-						}
+						const limit = this.getNodeParameter('limit', i) as number | undefined;
+						const page = this.getNodeParameter('page', i) as number | undefined;
+						const qs: IDataObject = { ...filters, limit, page };
 
 						const options: IHttpRequestOptions = {
 							headers: {
@@ -1239,8 +1233,6 @@ export class EasyBill implements INodeType {
 				/* ╚═════════════════════════════╝ */
 				if (operation === 'getDocumentPayments') {
 					const returnAll = this.getNodeParameter('returnAll', i, true) as boolean;
-					const limit = this.getNodeParameter('limit', i) as number | undefined;
-					const page = this.getNodeParameter('page', i) as number | undefined;
 					const additionalFields = this.getNodeParameter('additionalFields', i, {}) as IDataObject;
 
 					if (returnAll) {
@@ -1254,13 +1246,9 @@ export class EasyBill implements INodeType {
 							returnData.push(aggregated);
 						}
 					} else {
-						const qs: IDataObject = { ...additionalFields };
-						if (limit !== undefined && limit !== null) {
-							qs.limit = limit;
-						}
-						if (page !== undefined && page !== null) {
-							qs.page = page;
-						}
+						const limit = this.getNodeParameter('limit', i) as number | undefined;
+						const page = this.getNodeParameter('page', i) as number | undefined;
+						const qs: IDataObject = { ...additionalFields, limit, page };
 
 						const options: IHttpRequestOptions = {
 							headers: {
