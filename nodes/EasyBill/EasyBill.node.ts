@@ -364,8 +364,8 @@ export class EasyBill implements INodeType {
 							returnData.push(aggregated);
 						}
 					} else {
-						const limit = this.getNodeParameter('limit', i, 50) as number;
-						const page = this.getNodeParameter('page', i, 1) as number;
+						const limit = this.getNodeParameter('limit', i) as number | undefined;
+						const page = this.getNodeParameter('page', i) as number | undefined;
 						const qs: IDataObject = { ...filters, limit, page };
 
 						const options: IHttpRequestOptions = {
@@ -1246,8 +1246,8 @@ export class EasyBill implements INodeType {
 							returnData.push(aggregated);
 						}
 					} else {
-						const limit = this.getNodeParameter('limit', i, 50) as number;
-						const page = this.getNodeParameter('page', i, 1) as number;
+						const limit = this.getNodeParameter('limit', i) as number | undefined;
+						const page = this.getNodeParameter('page', i) as number | undefined;
 						const qs: IDataObject = { ...additionalFields, limit, page };
 
 						const options: IHttpRequestOptions = {
